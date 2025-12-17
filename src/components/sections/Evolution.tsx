@@ -68,8 +68,8 @@ export default function Evolution() {
         {/* --- HEADER --- */}
         <div className="mb-12 lg:mb-24 text-center">
           <h2 className="flex flex-col font-black tracking-tighter uppercase leading-[0.9] mb-4">
-             <span className="text-[clamp(2.5rem,8vw,5rem)] text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 drop-shadow-xl">
-               THE EVOLUTION.
+             <span className="text-[clamp(2.4rem,8vw,5rem)] text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 drop-shadow-xl">
+               THE EVOLUTION
              </span>
           </h2>
           <p className="text-gray-400 text-xs sm:text-base font-medium tracking-widest uppercase">

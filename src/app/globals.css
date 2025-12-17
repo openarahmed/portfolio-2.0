@@ -38,6 +38,11 @@
 }
 
 /* Base Styles */
+
+html {
+  scroll-behavior: smooth !important;
+}
+
 body {
   background-color: var(--color-bg-deep);
   color: var(--color-text-main);

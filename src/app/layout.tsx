@@ -15,7 +15,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "My Portfolio",
+  title: "Shakil Ahmed - Digital Alchemist",
   description: "Built with Next.js and Tailwind",
 };
 
