@@ -57,22 +57,22 @@ const milestones = [
 
 export default function Evolution() {
   return (
-    <section className="relative w-full py-24 bg-[#050511] overflow-hidden">
+    <section className="relative w-full py-[3rem] lg:py-[clamp(6rem,10vh,10rem)] bg-[#050511] overflow-hidden">
       
       {/* Background Ambience */}
-      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-cyan-900/10 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-pink-900/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-cyan-900/10 blur-[100px] sm:blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-pink-900/10 blur-[100px] sm:blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="container mx-au px-4 sm:px-6 relative z-10 max-w-6xl">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-6xl">
         
         {/* --- HEADER --- */}
-        <div className="mb-20 text-center">
-          <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.9] mb-4">
-             <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 drop-shadow-xl">
+        <div className="mb-12 lg:mb-24 text-center">
+          <h2 className="flex flex-col font-black tracking-tighter uppercase leading-[0.9] mb-4">
+             <span className="text-[clamp(2.5rem,8vw,5rem)] text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 drop-shadow-xl">
                THE EVOLUTION.
              </span>
           </h2>
-          <p className="text-gray-400 text-sm md:text-base font-medium tracking-widest uppercase">
+          <p className="text-gray-400 text-xs sm:text-base font-medium tracking-widest uppercase">
             From visual design to full-stack architecture.
           </p>
         </div>
@@ -80,55 +80,53 @@ export default function Evolution() {
         {/* --- TIMELINE CONTAINER --- */}
         <div className="relative">
             
-            {/* The Central Vertical Line (Gradient) */}
+            {/* The Central Vertical Line */}
             <div className="absolute left-[20px] lg:left-1/2 top-0 bottom-0 w-[2px] lg:w-[3px] bg-gradient-to-b from-cyan-400 via-purple-500 to-pink-500 opacity-30 lg:opacity-50 lg:-translate-x-1/2 rounded-full" />
 
-            {/* Loop through Milestones */}
             <div className="flex flex-col gap-12 lg:gap-24">
                 {milestones.map((item, index) => (
                     <div key={item.id} className="relative flex flex-col lg:flex-row items-start lg:items-center w-full group">
                         
-                        {/* 1. LEFT SIDE: Description (Desktop Only) */}
-                        {/* On mobile, this moves to bottom or stays hidden based on preference. Here keeping it visible but styled differently. */}
-                        <div className="w-full lg:w-1/2 lg:pr-16 lg:text-right pl-12 lg:pl-0 mb-4 lg:mb-0 order-2 lg:order-1">
+                        {/* 1. LEFT SIDE: Description */}
+                        <div className="w-full lg:w-1/2 lg:pr-16 lg:text-right pl-12 lg:pl-0 mb-2 lg:mb-0 order-2 lg:order-1">
                              <p className="text-gray-400 text-sm leading-relaxed hidden lg:block hover:text-gray-200 transition-colors duration-300">
-                                {item.description}
-                             </p>
-                             
-                             {/* Mobile Description */}
-                             <p className="text-gray-400 text-sm leading-relaxed block lg:hidden pl-2">
                                 {item.description}
                              </p>
                         </div>
 
-                        {/* 2. CENTER: Icon Node & Connector */}
-                        <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 flex items-center justify-center order-1 lg:order-2">
-                             
-                             {/* The Glowing Circle Node */}
+                        {/* 2. CENTER: Icon Node */}
+                        <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 flex items-center justify-center order-1 lg:order-2 h-10 lg:h-auto">
                              <div className={`relative w-10 h-10 lg:w-14 lg:h-14 rounded-full bg-[#0b0f19] border border-white/20 flex items-center justify-center z-20 ${item.glow} transition-transform duration-500 group-hover:scale-110`}>
-                                 {/* Icon */}
                                  <div className={`text-white w-5 h-5 lg:w-7 lg:h-7 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]`}>
                                      {item.icon}
                                  </div>
                              </div>
 
-                             {/* Horizontal Connector Line (Left side - connecting to text) */}
-                             {/* Visible only on Desktop to connect Left Text to Center Node */}
+                             {/* Connectors */}
                              <div className={`hidden lg:block absolute right-full top-1/2 -translate-y-1/2 h-[1px] w-12 bg-gradient-to-l ${item.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                              <div className={`hidden lg:block absolute left-full top-1/2 -translate-y-1/2 h-[1px] w-8 bg-gradient-to-r ${item.gradient} to-transparent opacity-50`} />
-
                         </div>
 
                         {/* 3. RIGHT SIDE: Title & Role */}
-                        <div className="w-full lg:w-1/2 lg:pl-16 pl-12 lg:text-left order-1 lg:order-3 mb-2 lg:mb-0">
-                             <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1">
-                                {item.title} <span className="text-sm text-gray-500 font-normal ml-2 tracking-normal normal-case border border-white/10 px-2 py-0.5 rounded-full bg-white/5">{item.year}</span>
+                        <div className="w-full lg:w-1/2 lg:pl-16 pl-12 lg:text-left order-1 lg:order-3">
+                             
+                             {/* FIXED TITLE LAYOUT: Use Flex Wrap to prevent breaking */}
+                             <h3 className="flex flex-wrap items-center gap-2 text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1">
+                                <span>{item.title}</span>
+                                <span className="text-[10px] lg:text-sm text-gray-500 font-normal tracking-normal normal-case border border-white/10 px-2 py-0.5 rounded-full bg-white/5 whitespace-nowrap">
+                                    {item.year}
+                                </span>
                              </h3>
-                             <h4 className={`text-sm lg:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r ${item.gradient} uppercase tracking-wider mb-1`}>
+
+                             <h4 className={`text-xs lg:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r ${item.gradient} uppercase tracking-wider mb-2`}>
                                 {item.role}
                              </h4>
-                             <p className="text-gray-500 text-xs lg:text-sm font-medium">
+                             <p className="text-gray-500 text-xs lg:text-sm font-medium mb-3 lg:mb-0">
                                 {item.subtitle}
+                             </p>
+                             
+                             <p className="text-gray-400 text-xs sm:text-sm leading-relaxed block lg:hidden border-l-2 border-white/10 pl-3 mt-2">
+                                {item.description}
                              </p>
                         </div>
 

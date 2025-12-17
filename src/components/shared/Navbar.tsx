@@ -16,35 +16,36 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    // Responsive Container:
-    // Mobile: w-[92%] (fits nicely with margins)
-    // Desktop: w-auto (shrinks to content)
-    <div className="fixed bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-auto max-w-md sm:max-w-none">
+    // CONTAINER POSITIONING:
+    // Mobile: Fixed at bottom (bottom-0), Full width (w-full), No centering transform needed.
+    // Desktop: Floating (bottom-8), Centered (left-1/2 -translate-x-1/2), Auto width.
+    <div className="fixed bottom-0 left-0 w-full sm:bottom-8 sm:left-1/2 sm:w-auto sm:-translate-x-1/2 z-50 transition-all duration-300">
       
-      {/* Scrollable Container (Safety for very small screens) */}
-      <nav className="flex items-center justify-between sm:justify-center gap-1 sm:gap-2 px-2 py-2 sm:px-3 sm:py-2.5 rounded-2xl border border-white/5 bg-black/20 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.3),inset_0_1px_0_0_rgba(255,255,255,0.1)] ring-1 ring-white/5 relative overflow-hidden transition-all duration-300">
+      <nav className="flex items-center justify-between sm:justify-center w-full sm:w-auto gap-1 sm:gap-2 px-6 pb-5 pt-3 sm:px-4 sm:py-2.5 rounded-t-2xl sm:rounded-2xl border-t sm:border border-white/10 bg-[#050511]/90 sm:bg-[#050511]/80 backdrop-blur-xl shadow-[0_-4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.1)] ring-1 ring-white/5 relative overflow-hidden">
         
-        {/* Top Reflection */}
-        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-70" />
+        {/* Top Gloss Reflection */}
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-70" />
 
-        <ul className="flex items-center justify-between w-full sm:w-auto gap-1 sm:gap-1 relative z-10">
+        <ul className="flex items-center justify-between w-full sm:w-auto gap-0 sm:gap-1 relative z-10">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <li key={item.name} className="flex-1 sm:flex-none">
+              <li key={item.name} className="flex-1 sm:flex-none flex justify-center">
                 <Link
                   href={item.href}
-                  className={`group flex flex-col items-center justify-center gap-1 px-3 py-2.5 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 ${
-                    isActive ? "bg-white/10 shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" : "hover:bg-white/5"
+                  className={`group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 ${
+                    isActive ? "bg-white/5 sm:bg-white/10" : "hover:bg-white/5"
                   }`}
                 >
                   <item.icon
-                    className={`w-5 h-5 sm:w-4 sm:h-4 transition-colors duration-300 ${
-                      isActive ? "text-white" : "text-gray-400 group-hover:text-gray-200"
+                    // Mobile Icon: w-6 h-6 (Standard App Tab Size)
+                    // Desktop Icon: w-4 h-4 (Compact)
+                    className={`w-6 h-6 sm:w-4 sm:h-4 transition-all duration-300 ${
+                      isActive ? "text-white scale-105 sm:scale-110" : "text-gray-400 group-hover:text-gray-200"
                     }`}
                   />
                   
-                  {/* Text: HIDDEN on Mobile, SHOWN on Desktop */}
+                  {/* Desktop Label (Hidden on Mobile) */}
                   <span
                     className={`hidden sm:block text-[10px] font-medium transition-colors duration-300 ${
                       isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
@@ -52,34 +53,42 @@ export default function Navbar() {
                   >
                     {item.name}
                   </span>
+
+                  {/* ACTIVE INDICATOR DOT */}
+                  {/* Mobile: Top Dot (Optional style change) or Bottom Dot. Keeping Bottom Dot for consistency. */}
+                  {isActive && (
+                    <span className="absolute -bottom-2 sm:bottom-0.5 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                  )}
                 </Link>
               </li>
             );
           })}
+
+          {/* Divider (Desktop Only) */}
+          <div className="hidden sm:block w-[1px] h-8 bg-white/10 mx-2 relative z-10" />
+
+          {/* Resume Button */}
+          {/* Mobile: Integrated as just another icon to maintain even spacing */}
+          <li className="flex-1 sm:flex-none flex justify-center">
+            <Link
+              href="/resume.pdf"
+              target="_blank"
+              className="group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-6 sm:py-2 rounded-xl transition-all duration-500"
+            >
+              {/* Desktop Glow Only */}
+              <div className="hidden sm:block absolute inset-0 bg-blue-500/20 blur-md rounded-xl opacity-60 group-hover:opacity-100 group-hover:bg-blue-500/30 transition-all duration-500" />
+              
+              {/* Icon */}
+              <FileText className="w-6 h-6 sm:w-4 sm:h-4 text-blue-400 sm:text-blue-100 relative z-10 sm:drop-shadow-[0_0_10px_rgba(60,160,255,0.8)]" />
+              
+              {/* Desktop Text */}
+              <span className="hidden sm:block text-[10px] font-bold text-blue-100 relative z-10 drop-shadow-[0_0_10px_rgba(60,160,255,0.8)] uppercase tracking-wide">
+                Resume
+              </span>
+            </Link>
+          </li>
         </ul>
 
-        {/* Divider (Hidden on very small screens to save space if needed, or kept slim) */}
-        <div className="hidden sm:block w-[1px] h-8 bg-white/5 mx-1 relative z-10" />
-
-        {/* Resume Button */}
-        <Link
-          href="/resume"
-          className="group relative flex flex-col items-center justify-center gap-1 px-3 py-2 sm:px-6 sm:py-2 rounded-xl transition-all duration-500 ml-1 sm:ml-0"
-        >
-          {/* 1. The Pure Glow */}
-          <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-60 group-hover:opacity-100 group-hover:bg-blue-500/30 transition-all duration-500" />
-          
-          {/* 2. Center Light Source */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 sm:w-8 sm:h-8 bg-blue-400/20 blur-lg rounded-full" />
-
-          {/* Icon */}
-          <FileText className="w-5 h-5 sm:w-4 sm:h-4 text-blue-100 relative z-10 drop-shadow-[0_0_12px_rgba(60,160,255,1)]" />
-          
-          {/* Resume Text: HIDDEN on Mobile, SHOWN on Desktop */}
-          <span className="hidden sm:block text-[10px] font-semibold text-blue-100 relative z-10 drop-shadow-[0_0_12px_rgba(60,160,255,1)]">
-            Resume
-          </span>
-        </Link>
       </nav>
     </div>
   );
