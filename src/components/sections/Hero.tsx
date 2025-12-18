@@ -39,10 +39,10 @@ export default function Hero() {
         <div className="w-full lg:flex-1 flex flex-col items-center lg:items-start text-center lg:text-left z-20 max-w-[800px]">
           
           <h1 className="flex flex-col font-black tracking-tighter leading-[0.9] select-none">
-            <span className="text-[clamp(3.5rem,12vw,7.5rem)] text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">
+            <span className="text-[clamp(3.5rem,12vw,8rem)] text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-500 drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">
               DIGITAL
             </span>
-            <span className="text-[clamp(3rem,11vw,6.5rem)] text-transparent bg-clip-text bg-gradient-to-b from-gray-100 via-gray-300 to-gray-600 drop-shadow-xl pb-2">
+            <span className="text-[clamp(3rem,11vw,8rem)] text-transparent bg-clip-text bg-gradient-to-b from-gray-100 via-gray-300 to-gray-600 drop-shadow-xl pb-2">
               ALCHEMIST
             </span>
           </h1>
@@ -92,7 +92,7 @@ export default function Hero() {
                     <div className="absolute -top-[50%] -right-[50%] w-[150%] h-[150%] bg-gradient-to-b from-white/10 via-transparent to-transparent rotate-45 pointer-events-none z-20" />
                     
                     <Image 
-                        src="https://i.postimg.cc/DfLDPdRf/Shakil-portfolio-banner.png" 
+                        src="https://i.postimg.cc/L8cTqLX8/Shakil-s-Personal-Portfolio-Banner.png" 
                         alt="Shakil Profile"
                         fill
                         className="object-cover object-top scale-100 group-hover:scale-105 transition-transform duration-700"
