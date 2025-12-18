@@ -3,10 +3,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Download } from "lucide-react";
+import { Github, ExternalLink, Download, Play, X, ZoomIn } from "lucide-react";
 
 // --- DATA STRUCTURE ---
 const workSections = [
+  // 1. WEB DEVELOPMENT
   {
     id: "web",
     title: "WEB DEVELOPMENT",
@@ -14,33 +15,36 @@ const workSections = [
     layout: "left-large",
     largeProject: {
       title: "CoderMart",
-      desc: "E-commerce Platform",
+      // UPDATED DESCRIPTION:
+      desc: "A digital web services agency focused on seamless communication and elevating brand value with modern web solutions.",
       tags: ["Next.js", "Express.js", "MongoDB", "Firebase", "Tailwind"],
       image: "https://i.postimg.cc/RF4m5J4t/Web_banner_for_codermat.png",
       liveUrl: "https://codermat.com",
-      githubUrl: "https://github.com/openarahmed/codermat", // Web e Github thakbe
+      githubUrl: "https://github.com/openarahmed/codermat", 
     },
     smallProjects: [
       {
         title: "Kicken Web",
-        desc: "Landing Page",
+        // UPDATED DESCRIPTION:
+        desc: "Sports academy platform facilitating online trials, student communication, and showcasing achievements.",
         tags: ["Next.js", "Tailwind", "Firebase"],
         image: "https://i.postimg.cc/9MbhWXQz/web_banner_for_kicken.png",
         liveUrl: "https://kickenweb.netlify.app",
-        githubUrl: "https://github.com/openarahmed/kicken", // Web e Github thakbe
+        githubUrl: "https://github.com/openarahmed/kicken", 
       },
       {
         title: "Taza Mart",
-        desc: "Grocery Store",
+        // UPDATED DESCRIPTION:
+        desc: "Full-featured e-commerce site offering product showcasing, seamless order placement, and real-time tracking.",
         tags: ["Next.js", "Firebase", "Tailwind", "EmailJS"],
         image: "https://i.postimg.cc/4dsGkHs9/web_banner_for_tazaamart.png",
         liveUrl: "https://tazaamart.com",
-        githubUrl: "https://github.com/openarahmed/TazaaMart", // Web e Github thakbe
+        githubUrl: "https://github.com/openarahmed/TazaaMart", 
       },
     ],
   },
   
-  // --- MOBILE SECTION (GITHUB REMOVED) ---
+  // 2. MOBILE APP SOLUTIONS
   {
     id: "mobile",
     title: "MOBILE APP SOLUTIONS",
@@ -48,63 +52,103 @@ const workSections = [
     layout: "right-large",
     largeProject: {
       title: "FitMat",
-      desc: "Workout & Fitness Tracker",
+      // UPDATED DESCRIPTION:
+      desc: "Comprehensive fitness app featuring a calorie counter, exercise form correction, and daily workout tracking.",
       tags: ["React Native", "Expo", "Firebase", "Firestore"],
       image: "https://i.postimg.cc/tgSM41HY/mobile_app_image_for_fitmat.png",
       downloadUrl: "https://drive.google.com/file/d/1DFMRWKJd9BfeoAJnJo52DyZmUxFZjIJt/view?usp=sharing",
-      // githubUrl REMOVED for Privacy
     },
     smallProjects: [
       {
         title: "Routina", 
-        desc: "Daily Habit & Task Manager",
+        // UPDATED DESCRIPTION:
+        desc: "Smart AI-based task manager providing productivity tips, job finding tools, and detailed user analytics.",
         tags: ["React Native", "Expo", "Firebase", "Firestore"],
         image: "https://i.postimg.cc/KYqH8Kyn/mobile_app_image_for_routina.png",
         downloadUrl: "https://drive.google.com/file/d/1KNxuCzjleUXnRJoY9H34MOq6rZQcb856/view?usp=sharing",
-        // githubUrl REMOVED for Privacy
       },
       {
         title: "FitMat Meal",
-        desc: "Diet & Nutrition Planner",
-        tags: ["Flutter", "API Integration"], 
+        // UPDATED DESCRIPTION:
+        desc: "A specialized nutrition planner within the FitMat ecosystem for diet tracking and healthy meal planning.",
+         tags: ["React Native", "Expo", "Firebase", "Firestore"],
         image: "https://i.postimg.cc/vmqNZ1dT/mobile_app_image_for_fitmat_meal.png",
         downloadUrl: "#", 
-        // githubUrl REMOVED for Privacy
-      },
+    },
     ],
   },
-  
-  // ... Creative section ...
+
+  // 3. VIDEO EDITING
   {
-    id: "creative",
-    title: "CREATIVE & VISUALS",
-    subtitle: "Motion Graphics, UI/UX & Video Editing.",
+    id: "video",
+    title: "MOTION & EDITING",
+    subtitle: "High-end Commercials & Visual Storytelling.",
     layout: "left-large",
     largeProject: {
-      title: "3D Product Commercial",
-      tags: ["After Effects", "Blender"],
-      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
-      liveUrl: "#",
-      // githubUrl nei, tai button show korbe na
+      title: "AI Video Production",
+      desc: "Cinematic AI Storytelling",
+      tags: ["Veo3", "Premier Pro", "ElevenLab"],
+      type: "video",
+      image: "https://i.postimg.cc/GtL1D2Q3/portfolio_video_banner_1.png",
+      videoUrl: "https://www.youtube.com/embed/xwseky2ZxYA", // Video 1
     },
     smallProjects: [
       {
-        title: "Brand Identity Design",
-        tags: ["Figma", "Illustrator"],
-        image: "https://img.freepik.com/free-vector/corporate-branding-identity-design_91128-989.jpg?semt=ais_hybrid&w=740&q=80",
-        liveUrl: "#",
+        title: "Cinematic Trailer",
+        desc: "Professional Editing",
+        tags: ["Premier Pro", "Veo3"],
+        type: "video",
+        image: "https://i.postimg.cc/kXXzCLGX/portfolio-video-banner-3.png",
+        videoUrl: "https://www.youtube.com/embed/tclP9A2ze64", // Video 2
       },
       {
-        title: "Cinematic Showreel",
-        tags: ["DaVinci Resolve"],
-        image: "https://elements-resized.envatousercontent.com/elements-video-cover-images/files/360852902/Cinematic-Showreel_Preview-Image.jpg?w=500&cf_fit=cover&q=85&format=auto&s=bc0122b7a0f6dbf2eb054262158f6dbee1c54c88b6f20db3f21bf599c39b405a",
-        liveUrl: "#",
+        title: "Short Form Content",
+        desc: "Engaging Social Clips",
+        tags: ["Premier Pro", "ElevenLab"],
+        type: "video",
+        // NEW THUMBNAIL:
+        image: "https://i.postimg.cc/6qWNZ3hD/portfolio_video_banner.png", 
+        videoUrl: "https://www.youtube.com/embed/-HT9K-u4afY", // Video 3
+      },
+    ],
+  },
+
+
+  // 4. GRAPHIC DESIGN
+  {
+    id: "graphics",
+    title: "BRANDING & DESIGN",
+    subtitle: "Visual Identity, UI Kits & Print Design.",
+    layout: "right-large", 
+    largeProject: {
+      title: "Product Packaging",
+      desc: "Premium label and packaging design for consumer goods.",
+      tags: ["Photoshop"],
+      type: "image",
+      image: "https://i.postimg.cc/MG0BZPrX/Label-for-holuder-copy.jpg",
+    },
+    smallProjects: [
+      {
+        title: "Webinar Banner",
+        desc: "Professional event banner design for university webinars.",
+        tags: ["Photoshop"],
+        type: "image",
+        image: "https://i.postimg.cc/2j04Btkt/nub-WEBINAR-(1).jpg",
+      },
+      {
+        title: "Social Media Post",
+        desc: "Eye-catching promotional graphics for brand awareness.",
+        tags: ["Photoshop"],
+        type: "image",
+        image: "https://i.postimg.cc/qRXTgn8k/graphics_design.jpg",
       },
     ],
   },
 ];
 
 export default function Work() {
+  const [modalData, setModalData] = useState<any>(null);
+
   return (
     <section id="work" className="relative w-full py-[3rem] lg:py-[clamp(6rem,10vh,10rem)] bg-[#050511] overflow-hidden space-y-12 lg:space-y-32">
       
@@ -141,13 +185,13 @@ export default function Work() {
                     </p>
                  </div>
                  <div className="text-[10px] sm:text-xs font-mono text-gray-500 uppercase hidden md:block">
-                    0{index + 1} / 03
+                    0{index + 1} / 04
                  </div>
               </div>
 
               {/* --- 1. MOBILE LAYOUT --- */}
               <div className="block lg:hidden relative w-full">
-                  <MobileWorkSlider section={section} />
+                  <MobileWorkSlider section={section} setModalData={setModalData} />
               </div>
 
               {/* --- 2. DESKTOP LAYOUT --- */}
@@ -155,11 +199,11 @@ export default function Work() {
                 {section.layout === "left-large" ? (
                   <>
                     <div className="w-full h-full">
-                      <LargeCard project={section.largeProject} />
+                      <LargeCard project={section.largeProject} setModalData={setModalData} />
                     </div>
                     <div className="flex flex-col gap-6 xl:gap-8 h-full">
                       {section.smallProjects.map((proj, idx) => (
-                        <SmallCard key={idx} project={proj} />
+                        <SmallCard key={idx} project={proj} setModalData={setModalData} />
                       ))}
                     </div>
                   </>
@@ -167,11 +211,11 @@ export default function Work() {
                   <>
                     <div className="flex flex-col gap-6 xl:gap-8 h-full order-2 lg:order-1">
                       {section.smallProjects.map((proj, idx) => (
-                        <SmallCard key={idx} project={proj} />
+                        <SmallCard key={idx} project={proj} setModalData={setModalData} />
                       ))}
                     </div>
                     <div className="w-full h-full order-1 lg:order-2">
-                      <LargeCard project={section.largeProject} />
+                      <LargeCard project={section.largeProject} setModalData={setModalData} />
                     </div>
                   </>
                 )}
@@ -180,108 +224,101 @@ export default function Work() {
             </div>
           ))}
         </div>
-
       </div>
+
+      {/* === MEDIA MODAL (POPUP) === */}
+      {modalData && <MediaModal data={modalData} onClose={() => setModalData(null)} />}
+
     </section>
   );
 }
 
-// --- MOBILE COMPONENT ---
-function MobileWorkSlider({ section }: { section: any }) {
+// ... (MediaModal and MobileWorkSlider remain exactly the same as previous step) ...
+function MediaModal({ data, onClose }: { data: any, onClose: () => void }) {
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-fade-in" onClick={onClose}>
+            <div className="relative w-full max-w-5xl max-h-[90vh] flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
+                <button onClick={onClose} className="absolute -top-12 right-0 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"><X size={24} /></button>
+                <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#0b0f19] flex items-center justify-center">
+                    {data.type === "video" ? (
+                        <div className="relative w-full pt-[56.25%] bg-black"><iframe src={`${data.videoUrl}?autoplay=1`} className="absolute top-0 left-0 w-full h-full" title={data.title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/></div>
+                    ) : (
+                        <div className="relative w-full h-auto max-h-[80vh] flex items-center justify-center p-2"><img src={data.image} alt={data.title} className="max-w-full max-h-[80vh] object-contain rounded-lg"/></div>
+                    )}
+                </div>
+                <div className="mt-4 text-center"><h3 className="text-xl font-bold text-white">{data.title}</h3><p className="text-gray-400 text-sm mt-1">{data.desc}</p></div>
+            </div>
+        </div>
+    );
+}
+
+function MobileWorkSlider({ section, setModalData }: { section: any, setModalData: any }) {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const items = [section.largeProject, ...section.smallProjects];
-
-    const handleScroll = () => {
-        if (scrollRef.current) {
-            const scrollLeft = scrollRef.current.scrollLeft;
-            const width = window.innerWidth * 0.85; 
-            const index = Math.round(scrollLeft / width);
-            setActiveIndex(index);
-        }
-    };
-
-    useEffect(() => {
-        const container = scrollRef.current;
-        if (container) {
-            container.addEventListener("scroll", handleScroll);
-            return () => container.removeEventListener("scroll", handleScroll);
-        }
-    }, []);
-
+    const handleScroll = () => { if (scrollRef.current) { const scrollLeft = scrollRef.current.scrollLeft; const width = window.innerWidth * 0.85; const index = Math.round(scrollLeft / width); setActiveIndex(index); } };
+    useEffect(() => { const container = scrollRef.current; if (container) { container.addEventListener("scroll", handleScroll); return () => container.removeEventListener("scroll", handleScroll); } }, []);
     return (
         <>
             <div ref={scrollRef} className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-hide">
-                {items.map((proj, idx) => (
-                    <div key={idx} className="snap-center w-[85vw] flex-shrink-0 h-[280px]">
-                        <LargeCard project={proj} isMobile={true} />
-                    </div>
-                ))}
+                {items.map((proj, idx) => (<div key={idx} className="snap-center w-[85vw] flex-shrink-0 h-[280px]"><LargeCard project={proj} isMobile={true} setModalData={setModalData} /></div>))}
             </div>
-            <div className="flex justify-center mt-3">
-                <div className="flex gap-1.5">
-                    {items.map((_, idx) => (
-                        <div key={idx} className={`h-1 rounded-full transition-all duration-300 ${idx === activeIndex ? "w-4 bg-blue-500" : "w-1 bg-gray-700"}`} />
-                    ))}
-                </div>
-            </div>
+            <div className="flex justify-center mt-3"><div className="flex gap-1.5">{items.map((_, idx) => (<div key={idx} className={`h-1 rounded-full transition-all duration-300 ${idx === activeIndex ? "w-4 bg-blue-500" : "w-1 bg-gray-700"}`} />))}</div></div>
         </>
     );
 }
 
-// --- REUSABLE COMPONENTS ---
-
-function LargeCard({ project, isMobile = false }: { project: any, isMobile?: boolean }) {
+// --- UPDATED LARGE CARD (Shows Description) ---
+function LargeCard({ project, isMobile = false, setModalData }: { project: any, isMobile?: boolean, setModalData: any }) {
+  const isVideo = project.type === "video";
+  const isImageModal = project.type === "image";
   const actionLink = project.downloadUrl || project.liveUrl;
-  const isDownload = !!project.downloadUrl;
+  
+  const handleClick = (e: React.MouseEvent) => {
+      if (isVideo || isImageModal) {
+          e.preventDefault();
+          setModalData(project);
+      }
+  };
+
+  const Wrapper = isVideo || isImageModal ? 'div' : Link;
+  const wrapperProps = isVideo || isImageModal ? { onClick: handleClick, className: "cursor-pointer" } : { href: actionLink || "#", target: "_blank" };
 
   return (
-    <Link 
-        href={actionLink || "#"} 
-        target="_blank" 
+    // @ts-ignore
+    <Wrapper 
+        {...wrapperProps}
         className={`group relative block w-full h-full rounded-[20px] lg:rounded-[30px] border border-white/10 bg-[#0b0f19] overflow-hidden hover:border-blue-500/50 transition-all duration-500 shadow-2xl ${isMobile ? 'active:scale-95' : ''}`}
     >
-      
       <div className="absolute inset-0 w-full h-full">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-          priority={!isMobile} 
-          sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw"
-        />
+        <Image src={project.image} alt={project.title} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" priority={!isMobile} sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw" />
       </div>
       
       <div className="absolute inset-0 bg-gradient-to-t from-[#020006] via-[#020006]/60 to-transparent opacity-90 z-10" />
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-500 z-10 mix-blend-overlay" />
       
+      {isVideo && ( <div className="absolute inset-0 z-20 flex items-center justify-center"><div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-[0_0_30px_rgba(255,255,255,0.1)]"><Play className="w-6 h-6 sm:w-8 sm:h-8 text-white fill-white ml-1" /></div></div> )}
+      {isImageModal && ( <div className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/40 backdrop-blur-md text-white/80 border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity"><ZoomIn size={20} /></div> )}
+      
       <div className="absolute bottom-0 left-0 w-full p-6 lg:p-10 z-20">
-        
-        <div className="flex justify-between items-end mb-2 lg:mb-3">
-            <h3 className="text-xl lg:text-3xl font-black text-white drop-shadow-md uppercase tracking-tight leading-none">
-              {project.title}
-            </h3>
+        <div className="flex justify-between items-end mb-2">
+            <div className="max-w-[85%]">
+                <h3 className="text-xl lg:text-3xl font-black text-white drop-shadow-md uppercase tracking-tight leading-none mb-2">{project.title}</h3>
+                {/* NEW DESCRIPTION ADDED HERE */}
+                <p className="text-gray-300 text-xs lg:text-sm font-medium leading-relaxed line-clamp-2">{project.desc}</p>
+            </div>
             
             <div className="hidden lg:flex gap-3 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
-                {/* CONDITIONAL RENDERING FOR GITHUB BUTTON */}
                 {project.githubUrl && (
-                    <button 
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(project.githubUrl, '_blank'); }}
-                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-colors"
-                        title="View Code"
-                    >
-                        <Github size={20} />
-                    </button>
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(project.githubUrl, '_blank'); }} className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-colors"><Github size={20} /></button>
                 )}
-                
-                <div className="p-2 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/40">
-                    {isDownload ? <Download size={20} /> : <ExternalLink size={20} />}
-                </div>
+                {!isVideo && !isImageModal && (
+                    <div className="p-2 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/40">{project.downloadUrl ? <Download size={20} /> : <ExternalLink size={20} />}</div>
+                )}
             </div>
         </div>
         
-        <div className="flex flex-wrap gap-2 mb-0 lg:mb-4">
+        <div className="flex flex-wrap gap-2 mt-4 mb-0 lg:mb-4">
           {project.tags.map((tag: string, i: number) => <Tag key={i} label={tag} />)}
         </div>
 
@@ -289,69 +326,67 @@ function LargeCard({ project, isMobile = false }: { project: any, isMobile?: boo
           <div className="w-0 h-full bg-blue-500 group-hover:w-full transition-all duration-700 ease-out" />
         </div>
       </div>
-
-      <div className="absolute top-4 right-4 lg:hidden z-20 p-2 rounded-full bg-black/40 backdrop-blur-md text-white/80 border border-white/10">
-         {isDownload ? <Download size={16} /> : <ExternalLink size={16} />}
-      </div>
-
-    </Link>
+    </Wrapper>
   );
 }
 
-function SmallCard({ project }: { project: any }) {
+// --- UPDATED SMALL CARD (Shows Description) ---
+function SmallCard({ project, setModalData }: { project: any, setModalData: any }) {
+  const isVideo = project.type === "video";
+  const isImageModal = project.type === "image";
   const actionLink = project.downloadUrl || project.liveUrl;
-  const isDownload = !!project.downloadUrl;
+
+  const handleClick = (e: React.MouseEvent) => {
+      if (isVideo || isImageModal) {
+          e.preventDefault();
+          setModalData(project);
+      }
+  };
+
+  const Wrapper = isVideo || isImageModal ? 'div' : Link;
+  const wrapperProps = isVideo || isImageModal ? { onClick: handleClick, className: "cursor-pointer" } : { href: actionLink || "#", target: "_blank" };
 
   return (
-    <Link 
-        href={actionLink || "#"}
-        target="_blank"
+    // @ts-ignore
+    <Wrapper 
+        {...wrapperProps}
         className="group relative block w-full flex-1 min-h-[240px] rounded-[20px] lg:rounded-[30px] border border-white/10 bg-[#0b0f19] overflow-hidden hover:border-purple-500/50 transition-all duration-500 shadow-2xl"
     >
       <div className="absolute inset-0 w-full h-full">
-        <div className="relative w-full h-full rounded-[16px] lg:rounded-[24px] overflow-hidden">
-           <Image
-             src={project.image}
-             alt={project.title}
-             fill
-             className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-             sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw"
-           />
-        </div>
+        <Image src={project.image} alt={project.title} fill className="object-cover object-center transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw" />
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-t from-[#020006] via-[#020006]/60 to-transparent opacity-90 z-10" />
       <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent opacity-0 group-hover:opacity-40 transition-opacity duration-500 z-10 mix-blend-overlay" />
       
+      {isVideo && ( <div className="absolute inset-0 z-20 flex items-center justify-center"><div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)]"><Play className="w-5 h-5 text-white fill-white ml-0.5" /></div></div> )}
+      {isImageModal && ( <div className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/40 backdrop-blur-md text-white/80 border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity"><ZoomIn size={16} /></div> )}
+
       <div className={`absolute inset-0 z-20 p-6 lg:p-8 flex flex-col justify-end items-start`}>
-        
-        <div className="w-full flex justify-between items-end mb-2">
-            <h3 className="text-lg lg:text-2xl font-black text-white drop-shadow-md uppercase tracking-tight leading-none">
-              {project.title}
-            </h3>
+        <div className="w-full flex justify-between items-end mb-1">
+            <div className="max-w-[85%]">
+                <h3 className="text-lg lg:text-2xl font-black text-white drop-shadow-md uppercase tracking-tight leading-none mb-1">{project.title}</h3>
+                {/* NEW DESCRIPTION ADDED HERE */}
+                <p className="text-gray-300 text-[10px] lg:text-xs font-medium leading-relaxed line-clamp-2 opacity-80">{project.desc}</p>
+            </div>
 
             <div className="hidden lg:flex gap-2 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
-                 {/* CONDITIONAL RENDERING FOR GITHUB BUTTON */}
                  {project.githubUrl && (
-                    <button 
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(project.githubUrl, '_blank'); }}
-                        className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-colors"
-                    >
-                        <Github size={16} />
-                    </button>
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(project.githubUrl, '_blank'); }} className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-colors"><Github size={16} /></button>
                  )}
-
-                <div className="p-1.5 rounded-full bg-purple-600 text-white shadow-lg">
-                    {isDownload ? <Download size={16} /> : <ExternalLink size={16} />}
-                </div>
+                {!isVideo && !isImageModal && (
+                    <div className="p-1.5 rounded-full bg-purple-600 text-white shadow-lg">
+                        {project.downloadUrl ? <Download size={16} /> : <ExternalLink size={16} />}
+                    </div>
+                )}
             </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mt-0">
+        <div className="flex flex-wrap gap-2 mt-2">
           {project.tags.map((tag: string, i: number) => <Tag key={i} label={tag} />)}
         </div>
       </div>
-    </Link>
+    </Wrapper>
   );
 }
 

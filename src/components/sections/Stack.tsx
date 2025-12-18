@@ -1,21 +1,57 @@
 "use client";
 
 import React from "react";
-import { FaReact, FaNodeJs, FaPython, FaDocker, FaHtml5, FaCss3Alt, FaAws } from "react-icons/fa";
-import { SiNextdotjs, SiTypescript, SiFigma, SiFlutter } from "react-icons/si"; 
+// Importing appropriate icons
+import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaLock, FaVideo, FaBootstrap } from "react-icons/fa";
+import { 
+  SiNextdotjs, 
+  SiTypescript, 
+  SiExpress, 
+  SiMongodb, 
+  SiFirebase, 
+  SiRedux, 
+  SiTailwindcss, 
+  SiStripe, 
+  SiExpo, 
+  SiPostman, 
+  SiAdobephotoshop, 
+  SiAdobepremierepro,
+  SiFigma
+} from "react-icons/si"; 
 
+// --- REAL TECH STACK DATA ---
 const stackData = [
+  // Frontend
   { name: "React", icon: <FaReact />, color: "#61DAFB" },
-  { name: "Node.js", icon: <FaNodeJs />, color: "#339933" },
-  { name: "Python", icon: <FaPython />, color: "#3776AB" },
-  { name: "Docker", icon: <FaDocker />, color: "#2496ED" },
-  { name: "Figma", icon: <SiFigma />, color: "#F24E1E" },
-  { name: "HTML5", icon: <FaHtml5 />, color: "#E34F26" },
-  { name: "Next.js", icon: <SiNextdotjs />, color: "#000000" },
+  { name: "Next.js", icon: <SiNextdotjs />, color: "#ffffff" }, // White glow for dark mode
   { name: "TypeScript", icon: <SiTypescript />, color: "#3178C6" },
-  { name: "AWS", icon: <FaAws />, color: "#FF9900" },
-  { name: "Flutter", icon: <SiFlutter />, color: "#02569B" },
+  { name: "HTML5", icon: <FaHtml5 />, color: "#E34F26" },
   { name: "CSS3", icon: <FaCss3Alt />, color: "#1572B6" },
+  { name: "Tailwind", icon: <SiTailwindcss />, color: "#06B6D4" },
+  { name: "Bootstrap", icon: <FaBootstrap />, color: "#7952B3" },
+  { name: "Redux", icon: <SiRedux />, color: "#764ABC" },
+
+  // Backend & Database
+  { name: "Node.js", icon: <FaNodeJs />, color: "#339933" },
+  { name: "Express.js", icon: <SiExpress />, color: "#ffffff" },
+  { name: "MongoDB", icon: <SiMongodb />, color: "#47A248" },
+  { name: "Firebase", icon: <SiFirebase />, color: "#FFCA28" },
+
+  // Mobile App
+  { name: "React Native", icon: <FaReact />, color: "#61DAFB" },
+  { name: "Expo", icon: <SiExpo />, color: "#ffffff" },
+
+  // Payments & Tools
+  { name: "Stripe", icon: <SiStripe />, color: "#008CDD" },
+  { name: "SSLCommerz", icon: <FaLock />, color: "#F7931E" }, // Security Icon used
+  { name: "Git", icon: <FaGitAlt />, color: "#F05032" }, // Added Essential
+  { name: "Postman", icon: <SiPostman />, color: "#FF6C37" }, // Added Essential
+
+  // Creative & Design
+  { name: "Figma", icon: <SiFigma />, color: "#F24E1E" },
+  { name: "Photoshop", icon: <SiAdobephotoshop />, color: "#31A8FF" },
+  { name: "Premiere Pro", icon: <SiAdobepremierepro />, color: "#9999FF" },
+  { name: "CapCut", icon: <FaVideo />, color: "#ffffff" }, // Video Icon used
 ];
 
 export default function Stack() {
@@ -42,14 +78,16 @@ export default function Stack() {
         {/* Marquee Section */}
         <div className="w-full flex flex-col gap-4 sm:gap-8 mt-4 sm:mt-8">
             
-            <Marquee direction="left" speed={20}>
-              {stackData.map((tech, idx) => (
+            {/* Row 1: Left Scroll */}
+            <Marquee direction="left" speed={40}>
+              {stackData.slice(0, 11).map((tech, idx) => (
                   <GlassCard key={idx} tech={tech} />
               ))}
             </Marquee>
 
-            <Marquee direction="right" speed={25}>
-              {[...stackData].reverse().map((tech, idx) => (
+            {/* Row 2: Right Scroll (Rest of the items) */}
+            <Marquee direction="right" speed={40}>
+              {stackData.slice(11).map((tech, idx) => (
                   <GlassCard key={`rev-${idx}`} tech={tech} />
               ))}
             </Marquee>
@@ -79,7 +117,7 @@ export default function Stack() {
         }
         @media (max-width: 640px) {
           .animate-scroll-left, .animate-scroll-right {
-             animation-duration: 15s !important; 
+             animation-duration: 20s !important; 
           }
         }
       `}</style>
@@ -102,6 +140,7 @@ function Marquee({ children, direction, speed }: { children: React.ReactNode, di
             {children}
             {children}
             {children} 
+            {children} 
         </div>
     </div>
   );
@@ -109,8 +148,6 @@ function Marquee({ children, direction, speed }: { children: React.ReactNode, di
 
 function GlassCard({ tech }: { tech: { name: string, icon: React.ReactNode, color: string } }) {
   return (
-    // REMOVED HOVER DEPENDENCY: Always visible style
-    // Added hover:scale-110 only for movement effect
     <div className="group relative w-20 h-20 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden transition-all duration-300 hover:scale-110 active:scale-90 hover:border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] cursor-pointer">
         
         {/* Top Gloss */}

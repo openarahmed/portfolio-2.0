@@ -8,7 +8,7 @@ import emailjs from "@emailjs/browser";
 // --- UPDATED EMAILJS CONFIGURATION ---
 const SERVICE_ID = "service_9ro3aoy";
 const TEMPLATE_ID = "template_wwn29ef";
-const PUBLIC_KEY = "G0dM6Hh5AQ1B91bgi"; // Updated Key
+const PUBLIC_KEY = "G0dM6Hh5AQ1B91bgi"; 
 
 export default function Footer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,15 +53,15 @@ export default function Footer() {
           </Link>
         </div>
 
+        {/* UPDATED SOCIAL LINKS */}
         <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 mb-8">
-            <SocialLink href="https://linkedin.com" label="LinkedIn" />
-            <SocialLink href="https://github.com" label="GitHub" />
-            <SocialLink href="https://behance.net" label="Behance" />
-            <SocialLink href="https://dribbble.com" label="Dribbble" />
+            <SocialLink href="https://github.com/shakilcodes" label="GitHub" />
+            <SocialLink href="https://www.facebook.com/communicate.shakil" label="Facebook" />
         </div>
 
+        {/* UPDATED COPYRIGHT YEAR */}
         <div className="text-gray-600 text-[10px] sm:text-xs uppercase tracking-widest font-medium">
-            Copyright © {new Date().getFullYear()} Shakil. All rights reserved.
+            Copyright © 2023 Shakil. All rights reserved.
         </div>
 
       </div>
@@ -85,7 +85,7 @@ function SocialLink({ href, label }: { href: string, label: string }) {
     );
 }
 
-// --- UPDATED CONTACT MODAL ---
+// --- CONTACT MODAL (Unchanged) ---
 function ContactModal({ onClose }: { onClose: () => void }) {
     const form = useRef<HTMLFormElement>(null);
     const [projectType, setProjectType] = useState("WEB");
@@ -102,7 +102,6 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                 .then((result) => {
                     setLoading(false);
                     setStatus("success");
-                    // Close modal automatically after 2.5 seconds on success
                     setTimeout(() => {
                         onClose();
                     }, 2500);
@@ -118,7 +117,6 @@ function ContactModal({ onClose }: { onClose: () => void }) {
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-black/80 backdrop-blur-sm animate-fade-in">
             <div className="relative w-full sm:max-w-md bg-[#0b0f19] border border-white/10 rounded-[24px] sm:rounded-[30px] p-6 sm:p-8 shadow-[0_0_80px_-20px_rgba(37,99,235,0.4)] animate-scale-up overflow-hidden">
                 
-                {/* Modal Glows */}
                 <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-500/20 blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-purple-500/20 blur-[100px] pointer-events-none" />
 
@@ -134,7 +132,6 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                         Start a Project
                     </h3>
 
-                    {/* SUCCESS MESSAGE */}
                     {status === "success" ? (
                         <div className="flex flex-col items-center justify-center py-10 space-y-4 animate-fade-in">
                             <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center border border-green-500/20">
@@ -145,8 +142,6 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                         </div>
                     ) : (
                         <form ref={form} onSubmit={sendEmail} className="space-y-5 sm:space-y-6">
-                            
-                            {/* HIDDEN INPUT: Sends the selected projectType */}
                             <input type="hidden" name="project_type" value={projectType} />
 
                             <div className="space-y-2">
@@ -199,7 +194,6 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                                 </div>
                             </div>
 
-                            {/* ERROR MESSAGE */}
                             {status === "error" && (
                                 <div className="flex items-center gap-2 text-red-400 text-xs font-bold bg-red-400/10 p-3 rounded-lg border border-red-400/20">
                                     <AlertCircle size={16} />

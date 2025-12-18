@@ -84,54 +84,68 @@ export default function Evolution() {
             <div className="absolute left-[20px] lg:left-1/2 top-0 bottom-0 w-[2px] lg:w-[3px] bg-gradient-to-b from-cyan-400 via-purple-500 to-pink-500 opacity-30 lg:opacity-50 lg:-translate-x-1/2 rounded-full" />
 
             <div className="flex flex-col gap-12 lg:gap-24">
-                {milestones.map((item, index) => (
-                    <div key={item.id} className="relative flex flex-col lg:flex-row items-start lg:items-center w-full group">
-                        
-                        {/* 1. LEFT SIDE: Description */}
-                        <div className="w-full lg:w-1/2 lg:pr-16 lg:text-right pl-12 lg:pl-0 mb-2 lg:mb-0 order-2 lg:order-1">
-                             <p className="text-gray-400 text-sm leading-relaxed hidden lg:block hover:text-gray-200 transition-colors duration-300">
-                                {item.description}
-                             </p>
-                        </div>
+                {milestones.map((item, index) => {
+                    // Logic to alternate layout (Even: Standard, Odd: Reversed)
+                    const isEven = index % 2 === 0;
 
-                        {/* 2. CENTER: Icon Node */}
-                        <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 flex items-center justify-center order-1 lg:order-2 h-10 lg:h-auto">
-                             <div className={`relative w-10 h-10 lg:w-14 lg:h-14 rounded-full bg-[#0b0f19] border border-white/20 flex items-center justify-center z-20 ${item.glow} transition-transform duration-500 group-hover:scale-110`}>
-                                 <div className={`text-white w-5 h-5 lg:w-7 lg:h-7 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]`}>
-                                     {item.icon}
+                    return (
+                        <div key={item.id} className={`relative flex flex-col items-start lg:items-center w-full group ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+                            
+                            {/* 1. LEFT SIDE (DOM) - Description for Even, Title for Odd */}
+                            {/* Visual Left when Standard, Visual Right when Reversed */}
+                            <div className={`w-full lg:w-1/2 mb-2 lg:mb-0 order-2 lg:order-1 pl-12 lg:pl-0 
+                                ${isEven ? 'lg:pr-16 lg:text-right' : 'lg:pl-16 lg:text-left'}
+                            `}>
+                                 <p className="text-gray-400 text-sm leading-relaxed hidden lg:block hover:text-gray-200 transition-colors duration-300">
+                                    {item.description}
+                                 </p>
+                            </div>
+
+                            {/* 2. CENTER: Icon Node */}
+                            <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 flex items-center justify-center order-1 lg:order-2 h-10 lg:h-auto top-0 lg:top-auto">
+                                 <div className={`relative w-10 h-10 lg:w-14 lg:h-14 rounded-full bg-[#0b0f19] border border-white/20 flex items-center justify-center z-20 ${item.glow} transition-transform duration-500 group-hover:scale-110`}>
+                                     <div className={`text-white w-5 h-5 lg:w-7 lg:h-7 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]`}>
+                                         {item.icon}
+                                     </div>
                                  </div>
-                             </div>
 
-                             {/* Connectors */}
-                             <div className={`hidden lg:block absolute right-full top-1/2 -translate-y-1/2 h-[1px] w-12 bg-gradient-to-l ${item.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                             <div className={`hidden lg:block absolute left-full top-1/2 -translate-y-1/2 h-[1px] w-8 bg-gradient-to-r ${item.gradient} to-transparent opacity-50`} />
+                                 {/* Connectors - Balanced on both sides */}
+                                 <div className={`hidden lg:block absolute right-full top-1/2 -translate-y-1/2 h-[1px] w-12 bg-gradient-to-l ${item.gradient} to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500`} />
+                                 <div className={`hidden lg:block absolute left-full top-1/2 -translate-y-1/2 h-[1px] w-12 bg-gradient-to-r ${item.gradient} to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500`} />
+                            </div>
+
+                            {/* 3. RIGHT SIDE (DOM) - Title for Even, Description for Odd */}
+                            {/* Visual Right when Standard, Visual Left when Reversed */}
+                            <div className={`w-full lg:w-1/2 order-1 lg:order-3 pl-12 lg:pl-0 
+                                ${isEven ? 'lg:pl-16 lg:text-left' : 'lg:pr-16 lg:text-right'}
+                            `}>
+                                 
+                                 {/* Title Header */}
+                                 <h3 className={`flex flex-wrap items-center gap-2 text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1 
+                                     ${isEven ? 'justify-start' : 'justify-start lg:justify-end'}
+                                 `}>
+                                    <span>{item.title}</span>
+                                    <span className="text-[10px] lg:text-sm text-gray-500 font-normal tracking-normal normal-case border border-white/10 px-2 py-0.5 rounded-full bg-white/5 whitespace-nowrap">
+                                        {item.year}
+                                    </span>
+                                 </h3>
+
+                                 <h4 className={`text-xs lg:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r ${item.gradient} uppercase tracking-wider mb-2`}>
+                                    {item.role}
+                                 </h4>
+                                 <p className="text-gray-500 text-xs lg:text-sm font-medium mb-3 lg:mb-0">
+                                    {item.subtitle}
+                                 </p>
+                                 
+                                 {/* Mobile Description (Always Visible on Mobile) */}
+                                 <p className="text-gray-400 text-xs sm:text-sm leading-relaxed block lg:hidden border-l-2 border-white/10 pl-3 mt-2">
+                                    {item.description}
+                                 </p>
+                            </div>
+
                         </div>
-
-                        {/* 3. RIGHT SIDE: Title & Role */}
-                        <div className="w-full lg:w-1/2 lg:pl-16 pl-12 lg:text-left order-1 lg:order-3">
-                             
-                             {/* FIXED TITLE LAYOUT: Use Flex Wrap to prevent breaking */}
-                             <h3 className="flex flex-wrap items-center gap-2 text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1">
-                                <span>{item.title}</span>
-                                <span className="text-[10px] lg:text-sm text-gray-500 font-normal tracking-normal normal-case border border-white/10 px-2 py-0.5 rounded-full bg-white/5 whitespace-nowrap">
-                                    {item.year}
-                                </span>
-                             </h3>
-
-                             <h4 className={`text-xs lg:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r ${item.gradient} uppercase tracking-wider mb-2`}>
-                                {item.role}
-                             </h4>
-                             <p className="text-gray-500 text-xs lg:text-sm font-medium mb-3 lg:mb-0">
-                                {item.subtitle}
-                             </p>
-                             
-                             <p className="text-gray-400 text-xs sm:text-sm leading-relaxed block lg:hidden border-l-2 border-white/10 pl-3 mt-2">
-                                {item.description}
-                             </p>
-                        </div>
-
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
         </div>
