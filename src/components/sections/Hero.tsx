@@ -88,7 +88,8 @@ export default function Hero() {
           MOBILE APP VIEW (Small Screens Only)
           (App Style Dashboard)
          ========================================= */}
-      <div className="flex lg:hidden flex-col w-full min-h-[100dvh] bg-[#050511] relative px-5 pt-6 pb-28 font-sans">
+      {/* UPDATE: Reduced bottom padding from pb-28 to pb-10 */}
+      <div className="flex lg:hidden flex-col w-full min-h-[100dvh] bg-[#050511] relative px-5 pt-6 pb-10 font-sans">
         
         {/* Mobile Background Elements */}
         <div className="absolute top-[-10%] left-[-20%] w-[300px] h-[300px] bg-purple-600/30 blur-[100px] rounded-full pointer-events-none" />
