@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google"; // ১. ফন্ট ইম্পোর্ট
+import { Inter, JetBrains_Mono } from "next/font/google"; 
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
+// 👇 ১. Widget ইমপোর্ট করা হলো (পাথ ঠিক আছে কিনা চেক করে নিও)
+import WhatsAppWidget from "../components/shared/WhatsAppWidget"; 
 
-// ২. ফন্ট কনফিগার করা
 const inter = Inter({ 
   subsets: ["latin"], 
   variable: "--font-inter" 
@@ -26,10 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* ৩. বডি ট্যাগে ভেরিয়েবলগুলো পাস করা */}
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-bg-deep text-text-main`}>
+        
+        {/* মেইন কন্টেন্ট */}
         {children}
+        
+        {/* 👇 ২. এখানে Widget বসানো হলো, যাতে সব পেজে দেখায় */}
+        <WhatsAppWidget />
+        
+        {/* নেভিগেশন বার (Dock) */}
         <Navbar/>
+        
       </body>
     </html>
   );
