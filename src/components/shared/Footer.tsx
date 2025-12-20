@@ -44,7 +44,7 @@ export default function Footer() {
           </button>
 
           <Link
-            href="/resume.pdf" 
+            href="/Shakil_Ahmed_FullStack_Developer.pdf" 
             target="_blank"
             className="w-full sm:w-auto px-8 py-3 sm:py-4 rounded-full border border-purple-500/50 bg-purple-500/10 text-white font-bold text-sm sm:text-base tracking-wide transition-all hover:bg-purple-500/20 hover:border-purple-500 hover:scale-105 active:scale-95 shadow-[0_0_30px_-10px_rgba(168,85,247,0.3)] hover:shadow-[0_0_50px_-10px_rgba(168,85,247,0.5)] min-w-[200px] flex items-center justify-center gap-2"
           >

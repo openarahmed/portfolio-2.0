@@ -93,7 +93,7 @@ export default function Navbar() {
           {/* Resume Link keeps using Next.js Link because it opens a new file/tab */}
           <li className="flex-1 sm:flex-none flex justify-center">
             <Link
-              href="/resume.pdf"
+              href="/Shakil_Ahmed_FullStack_Developer.pdf"
               target="_blank"
               className="group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-6 sm:py-2 rounded-xl transition-all duration-500"
             >
