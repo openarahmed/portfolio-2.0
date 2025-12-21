@@ -114,8 +114,8 @@ export default function Hero() {
             <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pl-2 pr-4 py-1.5 backdrop-blur-md">
                 <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20">
                     <Image 
-                        src="https://i.postimg.cc/L8cTqLX8/Shakil-s-Personal-Portfolio-Banner.png" 
-                        alt="Profile" width={32} height={32} className="object-cover" 
+                        src="https://i.postimg.cc/c4QsPY2p/Screenshot-2025-12-21-154814.png" 
+                        alt="Profile" width={42} height={42} className="object-cover w-full h-full" 
                     />
                     {/* Online Dot on Avatar */}
                     <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#050511] rounded-full z-10"></div>
