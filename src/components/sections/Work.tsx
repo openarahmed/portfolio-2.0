@@ -165,7 +165,8 @@ export default function Work() {
         {/* === LOOP THROUGH SECTIONS === */}
         <div className="flex flex-col gap-12 lg:gap-32">
           {workSections.map((section, index) => (
-            <div key={section.id} className="relative w-full">
+            // UPDATE: Added 'id' attribute here so Hero section links can scroll to this specific div
+            <div id={section.id} key={section.id} className="relative w-full scroll-mt-24">
               
               {/* Section Sub-Header */}
               <div className="mb-4 sm:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-1 border-b border-white/5 pb-2 md:pb-4">

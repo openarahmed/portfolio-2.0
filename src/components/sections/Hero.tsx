@@ -16,6 +16,18 @@ export default function Hero() {
     if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // --- NEW: Specific Section Scroller ---
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // Offset for sticky headers if you have one, otherwise standard scroll
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        // Fallback if specific ID not found
+        scrollToWork();
+    }
+  };
+
   return (
     <section className="relative min-h-[100dvh] w-full bg-[#050511] overflow-hidden">
       
@@ -41,11 +53,11 @@ export default function Hero() {
                 </span>
               </h1>
               <p className="mt-8 text-lg text-gray-300 font-bold tracking-[0.2em] uppercase max-w-xl leading-relaxed">
-                <span className="text-blue-400">WEB</span>
+                <span className="text-blue-400">WEBsite</span>
                 <span className="mx-2 text-gray-600">•</span>
-                <span className="text-purple-400">MOBILE</span>
+                <span className="text-purple-400">MOBILE APP</span>
                 <span className="mx-2 text-gray-600">•</span>
-                <span className="text-pink-400">UI/UX</span>
+                <span className="text-pink-400">Graphic</span>
                 <span className="mx-2 text-gray-600">•</span>
                 <span className="text-orange-400">MOTION</span>
               </p>
@@ -172,23 +184,29 @@ export default function Hero() {
             </button>
         </div>
 
-        {/* 4. EXPERTISE HUB (Bento Grid) */}
+        {/* 4. EXPERTISE HUB (Bento Grid) - UPDATED FOR MOBILE REDIRECTION */}
         <div className="grid grid-cols-2 gap-4 h-[240px] mb-4">
             
             {/* Left Col */}
             <div className="flex flex-col gap-4 h-full">
                 
-                {/* Top: WEB (Large) */}
-                <div className="flex-1 bg-gradient-to-b from-blue-900/40 to-blue-900/10 border border-blue-500/20 rounded-3xl p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_20px_rgba(59,130,246,0.1)] active:scale-95 transition-transform">
+                {/* Top: WEB (Large) -> Scrolls to #web */}
+                <div 
+                    onClick={() => scrollToSection('web')}
+                    className="cursor-pointer flex-1 bg-gradient-to-b from-blue-900/40 to-blue-900/10 border border-blue-500/20 rounded-3xl p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_20px_rgba(59,130,246,0.1)] active:scale-95 transition-transform hover:bg-blue-900/20"
+                >
                     <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-2 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.3)]">
                         <Monitor size={20} />
                     </div>
                     <span className="text-white font-bold text-xs tracking-wider">WEB</span>
                 </div>
 
-                {/* Bottom: MOTION (Small) */}
-                <div className="h-[80px] bg-white/5 border border-white/10 rounded-3xl p-4 flex items-center gap-3 active:scale-95 transition-transform">
-                     <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                {/* Bottom: MOTION (Small) -> Scrolls to #video */}
+                <div 
+                    onClick={() => scrollToSection('video')}
+                    className="cursor-pointer h-[80px] bg-white/5 border border-white/10 rounded-3xl p-4 flex items-center gap-3 active:scale-95 transition-transform hover:bg-white/10"
+                >
+                      <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
                         <Play size={16} />
                     </div>
                     <span className="text-gray-300 font-bold text-xs tracking-wider">MOTION</span>
@@ -198,17 +216,23 @@ export default function Hero() {
             {/* Right Col */}
             <div className="flex flex-col gap-4 h-full">
                  
-                 {/* Top: UI/UX (Small) */}
-                 <div className="h-[80px] bg-white/5 border border-white/10 rounded-3xl p-4 flex items-center gap-3 active:scale-95 transition-transform">
-                     <div className="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400">
+                 {/* Top: UI/UX (Small) -> Scrolls to #graphics */}
+                 <div 
+                    onClick={() => scrollToSection('graphics')}
+                    className="cursor-pointer h-[80px] bg-white/5 border border-white/10 rounded-3xl p-4 flex items-center gap-3 active:scale-95 transition-transform hover:bg-white/10"
+                 >
+                      <div className="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400">
                         <PenTool size={16} />
                     </div>
-                    <span className="text-gray-300 font-bold text-xs tracking-wider">UI/UX</span>
+                    <span className="text-gray-300 font-bold text-xs tracking-wider">Graphics</span>
                 </div>
 
-                {/* Bottom: MOBILE (Large) */}
-                <div className="flex-1 bg-gradient-to-b from-purple-900/40 to-purple-900/10 border border-purple-500/20 rounded-3xl p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_20px_rgba(168,85,247,0.1)] active:scale-95 transition-transform">
-                     <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-2 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]">
+                {/* Bottom: MOBILE (Large) -> Scrolls to #mobile */}
+                <div 
+                    onClick={() => scrollToSection('mobile')}
+                    className="cursor-pointer flex-1 bg-gradient-to-b from-purple-900/40 to-purple-900/10 border border-purple-500/20 rounded-3xl p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_20px_rgba(168,85,247,0.1)] active:scale-95 transition-transform hover:bg-purple-900/20"
+                >
+                      <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-2 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]">
                         <Smartphone size={20} />
                     </div>
                     <span className="text-white font-bold text-xs tracking-wider">MOBILE</span>
