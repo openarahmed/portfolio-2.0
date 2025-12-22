@@ -1,22 +1,31 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link"; // Sudhu Resume er jonno thakbe
-import { Home, Monitor, Layers, Info, Mail, FileText } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation"; 
+import { Home, Monitor, Layers, Info, Mail, FileText, BookOpen } from "lucide-react";
 
 const navItems = [
   { name: "Home", href: "home", icon: Home },
   { name: "Work", href: "work", icon: Monitor },
   { name: "Stack", href: "stack", icon: Layers },
+  { name: "Blog", href: "/blog", icon: BookOpen }, // External route
   { name: "About", href: "about", icon: Info },
   { name: "Contact", href: "contact", icon: Mail },
 ];
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
+  const pathname = usePathname();
+  const router = useRouter();
 
-  // --- SCROLL SPY (Auto detect active section) ---
+  // Check if we are on the homepage
+  const isHomePage = pathname === "/";
+
+  // --- SCROLL SPY (Only runs on homepage) ---
   useEffect(() => {
+    if (!isHomePage) return; // Don't run spy on blog page
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -29,21 +38,37 @@ export default function Navbar() {
     );
 
     navItems.forEach((item) => {
-      const section = document.getElementById(item.href);
-      if (section) observer.observe(section);
+      // Only observe sections (ignore external links like /blog)
+      if (!item.href.startsWith("/")) {
+        const section = document.getElementById(item.href);
+        if (section) observer.observe(section);
+      }
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [isHomePage]); // Depend on isHomePage
 
-  // --- SMOOTH SCROLL HANDLER ---
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault(); // Stop instant jump
-    const element = document.getElementById(id);
-    if (element) {
-      // Smooth scroll execution
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-      setActiveSection(id); // Manually set active immediately
+  // --- SMART NAVIGATION HANDLER ---
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, itemHref: string) => {
+    // 1. If it's the Blog link (starts with /), let Next.js Link handle it naturally
+    if (itemHref.startsWith("/")) {
+      return; 
+    }
+
+    // 2. If we are on the Home Page -> Smooth Scroll
+    if (isHomePage) {
+      e.preventDefault(); // Stop default jump
+      const element = document.getElementById(itemHref);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        setActiveSection(itemHref);
+      }
+    } 
+    // 3. If we are on Blog Page -> Allow default navigation to "/" + "#section"
+    else {
+      // No e.preventDefault() here. 
+      // The <Link> component will navigate to "/#work" automatically.
+      setActiveSection(itemHref);
     }
   };
 
@@ -55,14 +80,26 @@ export default function Navbar() {
 
         <ul className="flex items-center justify-between w-full sm:w-auto gap-0 sm:gap-1 relative z-10">
           {navItems.map((item) => {
-            const isActive = activeSection === item.href;
+            const isExternal = item.href.startsWith("/"); // Check if it's /blog
+            
+            // Generate correct href:
+            // If external (/blog) -> keep as is
+            // If internal (work) & on Home -> "#work"
+            // If internal (work) & NOT on Home -> "/#work" (forces redirect to home anchor)
+            const linkHref = isExternal 
+                ? item.href 
+                : (isHomePage ? `#${item.href}` : `/#${item.href}`);
+
+            // Active State Logic
+            const isActive = isExternal 
+                ? pathname.startsWith(item.href) 
+                : activeSection === item.href && isHomePage;
+
             return (
               <li key={item.name} className="flex-1 sm:flex-none flex justify-center">
-                
-                {/* CHANGE: Used normal <a> instead of <Link> for smooth scroll */}
-                <a
-                  href={`#${item.href}`}
-                  onClick={(e) => handleScroll(e, item.href)}
+                <Link
+                  href={linkHref}
+                  onClick={(e) => handleNavigation(e, item.href)}
                   className={`group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 cursor-pointer ${
                     isActive ? "bg-white/5 sm:bg-white/10" : "hover:bg-white/5"
                   }`}
@@ -83,14 +120,14 @@ export default function Navbar() {
                   {isActive && (
                     <span className="absolute -bottom-2 sm:bottom-0.5 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
                   )}
-                </a>
+                </Link>
               </li>
             );
           })}
 
           <div className="hidden sm:block w-[1px] h-8 bg-white/10 mx-2 relative z-10" />
 
-          {/* Resume Link keeps using Next.js Link because it opens a new file/tab */}
+          {/* Resume Link */}
           <li className="flex-1 sm:flex-none flex justify-center">
             <Link
               href="/Shakil_Ahmed_FullStack_Developer.pdf"

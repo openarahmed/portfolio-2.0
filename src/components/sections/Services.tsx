@@ -85,8 +85,8 @@ export default function Services() {
           <div className="w-12 sm:w-24 h-1 sm:h-1.5 mt-3 sm:mt-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full" />
         </div>
 
-        {/* --- MOBILE VIEW --- */}
-        <div className="block lg:hidden relative w-full">
+        {/* --- MOBILE VIEW (Slider) - Visible only on XS/SM --- */}
+        <div className="block md:hidden relative w-full">
             <div 
                 ref={scrollRef}
                 className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-8 -mx-4 px-4 scrollbar-hide"
@@ -113,11 +113,26 @@ export default function Services() {
             </div>
         </div>
 
-        {/* --- DESKTOP VIEW --- */}
+        {/* --- TABLET VIEW (Grid Layout) - Visible only on MD --- */}
+        {/* CHANGED: This section specifically handles tablet layout (2 cols top, 1 col bottom) */}
+        <div className="hidden md:grid lg:hidden grid-cols-2 gap-6">
+            {/* First two items take half width each */}
+            {services.slice(0, 2).map((service) => (
+                <div key={service.id} className="h-[360px]">
+                    <ServiceCard service={service} />
+                </div>
+            ))}
+            {/* Last item takes full width */}
+            <div className="col-span-2 h-[320px]">
+                <ServiceCard service={services[2]} isHorizontal={true} />
+            </div>
+        </div>
+
+        {/* --- DESKTOP VIEW - Visible only on LG+ --- */}
         <div className="hidden lg:grid grid-cols-3 gap-6 xl:gap-8">
             {services.map((service) => (
                 <div key={service.id} className="h-[400px]">
-                     <ServiceCard service={service} />
+                      <ServiceCard service={service} />
                 </div>
             ))}
         </div>
@@ -127,11 +142,11 @@ export default function Services() {
   );
 }
 
-// --- COLORFUL SERVICE CARD (Updated: Bottom Bar on Hover Only) ---
-function ServiceCard({ service }: { service: any }) {
+// --- COLORFUL SERVICE CARD (Updated to support Horizontal Layout for Tablets) ---
+function ServiceCard({ service, isHorizontal = false }: { service: any, isHorizontal?: boolean }) {
     return (
         <div 
-            className={`group relative w-full h-full rounded-[24px] sm:rounded-[30px] border ${service.borderDefault} bg-[#0b0f19] p-6 sm:p-8 flex flex-col items-start justify-between overflow-hidden transition-all duration-500 hover:-translate-y-2 ${service.borderHover} ${service.glow}`}
+            className={`group relative w-full h-full rounded-[24px] sm:rounded-[30px] border ${service.borderDefault} bg-[#0b0f19] p-6 sm:p-8 flex ${isHorizontal ? 'flex-row items-center gap-8' : 'flex-col items-start justify-between'} overflow-hidden transition-all duration-500 hover:-translate-y-2 ${service.borderHover} ${service.glow}`}
         >
             {/* 1. PERMANENT BACKGROUND TINT (Always Visible) */}
             <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-[0.08] transition-opacity duration-500 group-hover:opacity-15`} />
@@ -140,7 +155,7 @@ function ServiceCard({ service }: { service: any }) {
             <div className={`absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br ${service.gradient} blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
             
             {/* 3. ICON SECTION */}
-            <div className="relative w-full mb-4">
+            <div className={`relative ${isHorizontal ? 'w-auto mb-0' : 'w-full mb-4'}`}>
                  <div className="relative z-10 flex justify-between items-start">
                     
                     {/* Icon Box: Always Colored */}
@@ -150,20 +165,27 @@ function ServiceCard({ service }: { service: any }) {
                         </div>
                     </div>
                     
-                    {/* Arrow: Appears/Glows on Hover */}
-                    <div className={`${service.iconColor} opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300`}>
-                        <ArrowUpRight className="w-6 h-6" />
-                    </div>
+                    {/* Arrow: Appears/Glows on Hover (Only for vertical layout or separate positioning in horizontal) */}
+                    {!isHorizontal && (
+                        <div className={`${service.iconColor} opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300`}>
+                            <ArrowUpRight className="w-6 h-6" />
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* 4. CONTENT SECTION */}
-            <div className="relative z-10 mt-auto">
-                <h3 className="text-xl sm:text-2xl font-black text-white mb-3 tracking-wide uppercase leading-none">
-                    {service.title.split(" ").map((word:string, i:number) => (
-                        <span key={i} className="block">{word}</span>
-                    ))}
-                </h3>
+            <div className={`relative z-10 ${isHorizontal ? 'flex-1' : 'mt-auto'}`}>
+                <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-wide uppercase leading-none">
+                        {service.title}
+                    </h3>
+                    {isHorizontal && (
+                        <div className={`${service.iconColor} opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300`}>
+                            <ArrowUpRight className="w-6 h-6" />
+                        </div>
+                    )}
+                </div>
 
                 <p className="text-gray-400 font-medium text-xs sm:text-sm leading-relaxed max-w-[90%] group-hover:text-gray-200 transition-colors duration-300">
                     {service.desc}

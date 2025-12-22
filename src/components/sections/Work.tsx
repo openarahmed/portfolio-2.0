@@ -165,7 +165,6 @@ export default function Work() {
         {/* === LOOP THROUGH SECTIONS === */}
         <div className="flex flex-col gap-12 lg:gap-32">
           {workSections.map((section, index) => (
-            // UPDATE: Added 'id' attribute here so Hero section links can scroll to this specific div
             <div id={section.id} key={section.id} className="relative w-full scroll-mt-24">
               
               {/* Section Sub-Header */}
@@ -183,12 +182,40 @@ export default function Work() {
                  </div>
               </div>
 
-              {/* --- 1. MOBILE LAYOUT --- */}
-              <div className="block lg:hidden relative w-full">
+              {/* =========================================================
+                  1. MOBILE LAYOUT ONLY (Phones - xs to sm)
+                  CHANGED: 'block lg:hidden' -> 'block md:hidden'
+                  This keeps the slider ONLY for phones.
+                 ========================================================= */}
+              <div className="block md:hidden relative w-full">
                   <MobileWorkSlider section={section} setModalData={setModalData} />
               </div>
 
-              {/* --- 2. DESKTOP LAYOUT --- */}
+              {/* =========================================================
+                  2. TABLET LAYOUT ONLY (Tablets - md to lg)
+                  NEW: Specific layout for iPads/Tabs.
+                  Uses a Bento Grid: 1 Large Top + 2 Small Bottom
+                 ========================================================= */}
+              <div className="hidden md:block lg:hidden relative w-full">
+                  <div className="grid grid-cols-2 gap-5">
+                      {/* Top Row: Large Card (Full Width) */}
+                      <div className="col-span-2 h-[340px]">
+                          <LargeCard project={section.largeProject} setModalData={setModalData} />
+                      </div>
+                      
+                      {/* Bottom Row: 2 Small Cards (Half Width Each) */}
+                      {section.smallProjects.map((proj, idx) => (
+                          <div key={idx} className="col-span-1 h-[260px]">
+                              <SmallCard project={proj} setModalData={setModalData} />
+                          </div>
+                      ))}
+                  </div>
+              </div>
+
+              {/* =========================================================
+                  3. DESKTOP LAYOUT ONLY (Laptops/Desktops - lg+)
+                  Unchanged: Keeps the original side-by-side layout
+                 ========================================================= */}
               <div className="hidden lg:grid grid-cols-2 gap-6 xl:gap-8 lg:h-[550px] w-full">
                 {section.layout === "left-large" ? (
                   <>
