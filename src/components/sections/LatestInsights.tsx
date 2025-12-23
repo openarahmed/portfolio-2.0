@@ -58,7 +58,7 @@ export default async function LatestInsights() {
                   <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Knowledge Hub</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                  Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Insights</span>
+                  Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Blogs</span>
               </h2>
               <p className="text-gray-400 text-sm md:text-base leading-relaxed">
                   Deep dives into code, design systems, and the future of tech.
@@ -69,7 +69,7 @@ export default async function LatestInsights() {
             href="/blog" 
             className="group hidden md:flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-xs font-bold text-white uppercase tracking-widest whitespace-nowrap"
           >
-            Read All Articles 
+            Read All Blogs 
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

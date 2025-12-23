@@ -29,8 +29,7 @@ export default function Hero() {
     <section className="relative min-h-[100dvh] w-full bg-[#050511] overflow-hidden">
       
       {/* =========================================
-          DESKTOP & TABLET VIEW (md and up)
-          Reverted back to 'hidden lg:flex' so tablets don't see this
+          DESKTOP VIEW (Large Screens)
          ========================================= */}
       <div className="hidden lg:flex min-h-[100dvh] w-full flex-col items-center justify-center relative">
           
@@ -38,7 +37,6 @@ export default function Hero() {
           <div className="fixed top-0 right-0 w-[50vw] h-[50vw] bg-purple-900/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen animate-pulse-slow" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] md:bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)] pointer-events-none opacity-20" />
 
-          {/* Changed px-12 to px-6 md:px-12 for better tablet padding */}
           <div className="mx-auto w-full max-w-[1440px] relative z-10 flex flex-row items-center justify-between h-full px-12 gap-0"> 
             
             <div className="flex-1 flex flex-col items-start text-left z-20 max-w-[800px]">
@@ -98,11 +96,10 @@ export default function Hero() {
 
       {/* =========================================
           MOBILE & TABLET VIEW (xs to md)
-          Reverted to 'flex lg:hidden'.
-          Added 'md:' classes to make it look premium on tablets.
+          FIXED: Removed md:max-w-[720px] and md:mx-auto
+          to ensure full width consistency.
          ========================================= */}
-      {/* Changed px-5 to px-4 sm:px-6 lg:px-8 xl:px-12 to match global spacing */}
-      <div className="flex lg:hidden flex-col w-full min-h-[100dvh] bg-[#050511] relative px-4 sm:px-6 md:px-8 pt-6 pb-10 md:max-w-[720px] md:mx-auto md:py-12 font-sans justify-center">
+      <div className="flex lg:hidden flex-col w-full min-h-[100dvh] bg-[#050511] relative px-4 sm:px-6 md:px-8 pt-6 pb-10 md:py-12 font-sans justify-center">
         
         {/* Mobile Background Elements */}
         <div className="absolute top-[-10%] left-[-20%] w-[300px] h-[300px] bg-purple-600/30 blur-[100px] rounded-full pointer-events-none" />
@@ -140,31 +137,35 @@ export default function Hero() {
         </div>
 
         {/* 2. HERO CARD */}
-        {/* Increased sizes for tablet (md:) */}
-        <div className="relative w-full aspect-[16/9] rounded-[30px] md:rounded-[40px] overflow-hidden mb-6 md:mb-10 border border-white/10 shadow-2xl">
+       {/* 2. HERO CARD */}
+        {/* Changed aspect ratio to md:aspect-[2/1] for better tablet shape */}
+        <div className="relative w-full aspect-[16/9] md:aspect-[2/1] rounded-[30px] md:rounded-[40px] overflow-hidden mb-6 md:mb-10 border border-white/10 shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] to-[#16213e] z-0" />
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 z-0" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/30 blur-[50px] rounded-full" />
             
-            <div className="relative z-10 h-full flex items-center justify-between px-6 md:px-10">
-                <div className="flex flex-col justify-center h-full">
-                    <h1 className="text-2xl md:text-4xl font-black text-white leading-tight uppercase italic tracking-tighter">
+            <div className="relative z-10 h-full flex items-center justify-between px-6 md:px-12">
+                <div className="flex flex-col justify-center h-full relative z-20">
+                    {/* Increased font size for tablet */}
+                    <h1 className="text-3xl md:text-6xl font-black text-white leading-tight uppercase italic tracking-tighter">
                         DIGITAL <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">ALCHEMIST</span>
                     </h1>
                 </div>
-                {/* Made image larger on tablet */}
-                <div className="relative h-[115%] w-[140px] md:w-[220px] -mb-8 -mr-5 md:-mr-8">
+                
+                {/* Fixed Image for Tablet: Made it larger and adjusted positioning */}
+                <div className="relative h-[115%] md:h-[130%] w-[140px] md:w-[350px] -mb-8 -mr-5 md:-mr-10 md:-mb-12 flex items-end">
                     <Image 
                         src="https://i.postimg.cc/L8cTqLX8/Shakil-s-Personal-Portfolio-Banner.png" 
-                        alt="Shakil" fill className="object-cover object-top drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]"
+                        alt="Shakil" 
+                        fill 
+                        className="object-cover object-top drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]"
                     />
                 </div>
             </div>
         </div>
 
         {/* 3. ACTION BUTTONS */}
-        {/* Increased padding and font size for tablet */}
         <div className="flex gap-4 md:gap-6 mb-8 md:mb-12">
             <button 
                 onClick={scrollToWork}
@@ -183,7 +184,6 @@ export default function Hero() {
         </div>
 
         {/* 4. EXPERTISE HUB (Bento Grid) */}
-        {/* Increased height and gap for tablet */}
         <div className="grid grid-cols-2 gap-4 md:gap-6 h-[240px] md:h-[320px] mb-4">
             <div className="flex flex-col gap-4 md:gap-6 h-full">
                 <div 

@@ -56,6 +56,7 @@ export default function Footer() {
         {/* UPDATED SOCIAL LINKS */}
         <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 mb-8">
             <SocialLink href="https://github.com/shakilcodes" label="GitHub" />
+            <SocialLink href="https://www.linkedin.com/in/devshakil/" label="LinkedIn" />
             <SocialLink href="https://www.facebook.com/communicate.shakil" label="Facebook" />
         </div>
 
