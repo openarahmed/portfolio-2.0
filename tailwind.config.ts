@@ -17,7 +17,7 @@ const config: Config = {
     extend: {
       colors: {
         bg: {
-          deep: "#020408",    // Main Background
+          deep: "#020408", // Main Background
           surface: "#121212", // Card Background
         },
         primary: {
@@ -27,8 +27,8 @@ const config: Config = {
           purple: "#A855F7", // Neon Purple
         },
         text: {
-          main: "#FAFAFA",    // Primary White
-          muted: "#A1A1AA",   // Secondary Grey
+          main: "#FAFAFA", // Primary White
+          muted: "#A1A1AA", // Secondary Grey
         },
       },
       fontFamily: {
@@ -36,8 +36,12 @@ const config: Config = {
         mono: ["var(--font-jetbrains)", "monospace"],
       },
       animation: {
-        "marquee": "marquee 35s linear infinite",
-        "glow": "glow 2s ease-in-out infinite alternate",
+        marquee: "marquee 35s linear infinite",
+        glow: "glow 2s ease-in-out infinite alternate",
+        // ADDED: The wave effect for your text
+        shine: "shine 5s linear infinite",
+        // ADDED: The slow pulse for background blobs
+        "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
         marquee: {
@@ -47,6 +51,11 @@ const config: Config = {
         glow: {
           from: { boxShadow: "0 0 10px #3B82F6" },
           to: { boxShadow: "0 0 20px #A855F7" },
+        },
+        // ADDED: Keyframes for the shine effect
+        shine: {
+          "0%": { backgroundPosition: "200% center" },
+          "100%": { backgroundPosition: "-200% center" },
         },
       },
     },
