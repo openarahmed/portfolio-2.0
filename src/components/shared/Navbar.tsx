@@ -30,7 +30,7 @@ export default function Navbar() {
   // Check if we are on the homepage
   const isHomePage = pathname === "/";
 
-  // --- SCROLL SPY (Only runs on homepage) ---
+  // SCROLL SPY (Only runs on homepage)
   useEffect(() => {
     if (!isHomePage) return; // Don't run spy on blog page
 
@@ -56,7 +56,7 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, [isHomePage]); // Depend on isHomePage
 
-  // --- SMART NAVIGATION HANDLER ---
+  // SMART NAVIGATION HANDLER
   const handleNavigation = (
     e: React.MouseEvent<HTMLAnchorElement>,
     itemHref: string,
@@ -85,17 +85,16 @@ export default function Navbar() {
 
   return (
     <div className="fixed bottom-0 left-0 w-full sm:bottom-8 sm:left-1/2 sm:w-auto sm:-translate-x-1/2 z-50 transition-all duration-300">
-      <nav className="flex items-center justify-between sm:justify-center w-full sm:w-auto gap-1 sm:gap-2 px-6 pb-5 pt-3 sm:px-4 sm:py-2.5 rounded-t-2xl sm:rounded-2xl border-t sm:border border-white/10 bg-[#050511]/90 sm:bg-[#050511]/80 backdrop-blur-xl shadow-[0_-4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.1)] ring-1 ring-white/5 relative overflow-hidden">
+      <nav className="flex items-center justify-between sm:justify-center w-full sm:w-auto gap-1 sm:gap-2 px-4 pb-4 pt-3 sm:px-4 sm:py-2.5 rounded-t-2xl sm:rounded-2xl border-t sm:border border-white/10 bg-[#050511]/95 sm:bg-[#050511]/80 backdrop-blur-xl shadow-[0_-4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.1)] ring-1 ring-white/5 relative overflow-hidden">
         <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-70" />
 
-        <ul className="flex items-center justify-between w-full sm:w-auto gap-0 sm:gap-1 relative z-10">
+        <ul className="flex items-center justify-between w-full sm:w-auto gap-1 sm:gap-1 relative z-10">
           {navItems.map((item) => {
             const isExternal = item.href.startsWith("/"); // Check if it's /blog
+            const isHiddenOnMobile =
+              item.name === "Stack" || item.name === "About";
 
-            // Generate correct href:
-            // If external (/blog) -> keep as is
-            // If internal (work) & on Home -> "#work"
-            // If internal (work) & NOT on Home -> "/#work" (forces redirect to home anchor)
+            // Generate correct href
             const linkHref = isExternal
               ? item.href
               : isHomePage
@@ -110,24 +109,26 @@ export default function Navbar() {
             return (
               <li
                 key={item.name}
-                className="flex-1 sm:flex-none flex justify-center"
+                className={`${
+                  isHiddenOnMobile ? "hidden sm:flex" : "flex"
+                } flex-1 sm:flex-none justify-center`}
               >
                 <Link
                   href={linkHref}
                   onClick={(e) => handleNavigation(e, item.href)}
-                  className={`group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 cursor-pointer ${
+                  className={`group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 cursor-pointer w-full sm:w-auto ${
                     isActive ? "bg-white/5 sm:bg-white/10" : "hover:bg-white/5"
                   }`}
                 >
                   <item.icon
-                    className={`w-6 h-6 sm:w-4 sm:h-4 transition-all duration-300 ${
+                    className={`w-5 h-5 sm:w-4 sm:h-4 transition-all duration-300 ${
                       isActive
                         ? "text-white scale-105 sm:scale-110"
                         : "text-gray-400 group-hover:text-gray-200"
                     }`}
                   />
                   <span
-                    className={`hidden sm:block text-[10px] font-medium transition-colors duration-300 ${
+                    className={`block text-[9px] sm:text-[10px] font-medium transition-colors duration-300 mt-0.5 sm:mt-0 ${
                       isActive
                         ? "text-white"
                         : "text-gray-500 group-hover:text-gray-300"
@@ -137,7 +138,7 @@ export default function Navbar() {
                   </span>
 
                   {isActive && (
-                    <span className="absolute -bottom-2 sm:bottom-0.5 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                    <span className="absolute -bottom-1.5 sm:bottom-0.5 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
                   )}
                 </Link>
               </li>
@@ -147,15 +148,15 @@ export default function Navbar() {
           <div className="hidden sm:block w-[1px] h-8 bg-white/10 mx-2 relative z-10" />
 
           {/* Resume Link */}
-          <li className="flex-1 sm:flex-none flex justify-center">
+          <li className="flex flex-1 sm:flex-none justify-center">
             <Link
               href="/Shakil_Full_Stack_Developer.pdf"
               target="_blank"
-              className="group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-6 sm:py-2 rounded-xl transition-all duration-500"
+              className="group relative flex flex-col items-center justify-center gap-1 p-2 sm:px-6 sm:py-2 rounded-xl transition-all duration-500 w-full sm:w-auto"
             >
               <div className="hidden sm:block absolute inset-0 bg-blue-500/20 blur-md rounded-xl opacity-60 group-hover:opacity-100 group-hover:bg-blue-500/30 transition-all duration-500" />
-              <FileText className="w-6 h-6 sm:w-4 sm:h-4 text-blue-400 sm:text-blue-100 relative z-10 sm:drop-shadow-[0_0_10px_rgba(60,160,255,0.8)]" />
-              <span className="hidden sm:block text-[10px] font-bold text-blue-100 relative z-10 drop-shadow-[0_0_10px_rgba(60,160,255,0.8)] uppercase tracking-wide">
+              <FileText className="w-5 h-5 sm:w-4 sm:h-4 text-blue-400 sm:text-blue-100 relative z-10 sm:drop-shadow-[0_0_10px_rgba(60,160,255,0.8)]" />
+              <span className="block text-[9px] sm:text-[10px] font-bold text-blue-400 sm:text-blue-100 relative z-10 sm:drop-shadow-[0_0_10px_rgba(60,160,255,0.8)] uppercase tracking-wide mt-0.5 sm:mt-0">
                 Resume
               </span>
             </Link>
