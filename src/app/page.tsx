@@ -6,6 +6,7 @@ import Work from "@/components/sections/Work";
 import LatestInsights from "@/components/sections/LatestInsights"; // 1. Import This
 import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
+import BeyondCode from "@/components/sections/BeyondCode";
 
 export default function Home() {
   return (
@@ -29,6 +30,9 @@ export default function Home() {
       <section id="about">
         <Evolution />
       </section>
+      <section id="studio">
+        <BeyondCode />
+      </section>
 
       {/* 2. Add LatestInsights Here */}
       {/* We don't strictly need an ID for scroll spy since the nav link goes to /blog page, 
@@ -38,7 +42,6 @@ export default function Home() {
       <section id="contact">
         <Footer />
       </section>
-
     </main>
   );
 }

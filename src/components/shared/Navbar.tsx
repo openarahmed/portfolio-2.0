@@ -11,13 +11,15 @@ import {
   Mail,
   FileText,
   BookOpen,
+  Palette, // Added Palette icon for Studio
 } from "lucide-react";
 
 const navItems = [
   { name: "Home", href: "home", icon: Home },
   { name: "Work", href: "work", icon: Monitor },
   { name: "Stack", href: "stack", icon: Layers },
-  { name: "Blog", href: "/blog", icon: BookOpen }, // External route
+  { name: "Studio", href: "studio", icon: Palette }, // Added Studio link
+  { name: "Blog", href: "/blog", icon: BookOpen },
   { name: "About", href: "about", icon: Info },
   { name: "Contact", href: "contact", icon: Mail },
 ];
@@ -32,7 +34,7 @@ export default function Navbar() {
 
   // SCROLL SPY (Only runs on homepage)
   useEffect(() => {
-    if (!isHomePage) return; // Don't run spy on blog page
+    if (!isHomePage) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -54,7 +56,7 @@ export default function Navbar() {
     });
 
     return () => observer.disconnect();
-  }, [isHomePage]); // Depend on isHomePage
+  }, [isHomePage]);
 
   // SMART NAVIGATION HANDLER
   const handleNavigation = (
@@ -68,7 +70,7 @@ export default function Navbar() {
 
     // 2. If we are on the Home Page -> Smooth Scroll
     if (isHomePage) {
-      e.preventDefault(); // Stop default jump
+      e.preventDefault();
       const element = document.getElementById(itemHref);
       if (element) {
         element.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -77,22 +79,23 @@ export default function Navbar() {
     }
     // 3. If we are on Blog Page -> Allow default navigation to "/" + "#section"
     else {
-      // No e.preventDefault() here.
-      // The <Link> component will navigate to "/#work" automatically.
       setActiveSection(itemHref);
     }
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full sm:bottom-8 sm:left-1/2 sm:w-auto sm:-translate-x-1/2 z-50 transition-all duration-300">
+    <div className="fixed bottom-0 left-0 w-full sm:bottom-8 sm:left-1/2 sm:w-auto sm:-translate-x-1/2 z-[100] transition-all duration-300">
       <nav className="flex items-center justify-between sm:justify-center w-full sm:w-auto gap-1 sm:gap-2 px-4 pb-4 pt-3 sm:px-4 sm:py-2.5 rounded-t-2xl sm:rounded-2xl border-t sm:border border-white/10 bg-[#050511]/95 sm:bg-[#050511]/80 backdrop-blur-xl shadow-[0_-4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.1)] ring-1 ring-white/5 relative overflow-hidden">
         <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-70" />
 
         <ul className="flex items-center justify-between w-full sm:w-auto gap-1 sm:gap-1 relative z-10">
           {navItems.map((item) => {
-            const isExternal = item.href.startsWith("/"); // Check if it's /blog
+            const isExternal = item.href.startsWith("/");
+            // Hide specific items on mobile to prevent navbar crowding
             const isHiddenOnMobile =
-              item.name === "Stack" || item.name === "About";
+              item.name === "Stack" ||
+              item.name === "About" ||
+              item.name === "Studio";
 
             // Generate correct href
             const linkHref = isExternal

@@ -28,7 +28,7 @@ export default function Hero() {
     <section className="relative min-h-[100dvh] w-full bg-[#09090e] overflow-hidden">
       {/* =========================================
           DESKTOP VIEW (Premium Glass, strictly lg and above)
-         ========================================= */}
+          ========================================= */}
       <div className="hidden lg:flex min-h-[100dvh] w-full flex-col items-center justify-center relative px-8 py-12">
         <div className="fixed top-0 left-0 w-[50vw] h-[50vw] bg-blue-900/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
         <div className="fixed top-0 right-0 w-[50vw] h-[50vw] bg-purple-900/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
@@ -51,18 +51,20 @@ export default function Hero() {
               </span>
             </h1>
 
-            <p className="mt-6 2xl:mt-8 text-[13px] 2xl:text-[15px] font-bold tracking-[0.25em] uppercase max-w-xl 2xl:max-w-2xl leading-relaxed text-left flex flex-wrap gap-4 transition-all duration-500">
-              <span className="text-[#3b82f6]">WEBSITE</span>
+            {/* UPDATED: Subtitle now focuses on Tech Stack instead of general disciplines */}
+            <p className="mt-6 2xl:mt-8 text-[13px] 2xl:text-[15px] font-bold tracking-[0.15em] uppercase max-w-xl 2xl:max-w-2xl leading-relaxed text-left flex flex-wrap gap-3 transition-all duration-500">
+              <span className="text-[#61dafb]">NEXT.JS</span>
               <span className="text-[#2a2a3d]">•</span>
-              <span className="text-[#a855f7]">MOBILE APP</span>
+              <span className="text-[#a855f7]">MERN STACK</span>
               <span className="text-[#2a2a3d]">•</span>
-              <span className="text-[#ec4899]">GRAPHIC</span>
+              <span className="text-[#3178c6]">TYPESCRIPT</span>
               <span className="text-[#2a2a3d]">•</span>
-              <span className="text-[#f97316]">MOTION</span>
+              <span className="text-[#ec4899]">REACT NATIVE</span>
             </p>
 
+            {/* UPDATED: Tagline emphasizes engineering foundation */}
             <p className="mt-4 2xl:mt-5 text-[#8b8b9e] text-[13px] 2xl:text-[15px] max-w-md leading-relaxed tracking-wide transition-all duration-500">
-              Crafting digital experiences that captivate
+              Building scalable architecture and intuitive user experiences.
             </p>
 
             <div className="flex flex-row gap-5 mt-8 2xl:mt-10">
@@ -100,7 +102,7 @@ export default function Hero() {
 
       {/* =========================================
           MOBILE & TABLET VIEW (Compact Stacked Layout)
-         ========================================= */}
+          ========================================= */}
       <div className="flex lg:hidden flex-col w-full min-h-[100dvh] bg-[#0d0d16] relative px-5 md:px-16 pt-3 md:pt-10 pb-10 font-sans">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 md:mb-8 z-10">
@@ -152,11 +154,10 @@ export default function Hero() {
             </div>
 
             <p className="text-gray-300 text-[10px] md:text-[14px] leading-relaxed max-w-[170px] md:max-w-[260px]">
-              Crafting digital experiences that captivate
+              Specializing in full-stack and mobile architecture.
             </p>
           </div>
 
-          {/* FIXED: Changed object-cover to object-contain object-bottom to prevent head cropping */}
           <div className="absolute bottom-0 -right-4 md:right-0 w-[55%] md:w-[50%] h-[100%] md:h-full pointer-events-none">
             <Image
               src="https://i.postimg.cc/L8cTqLX8/Shakil-s-Personal-Portfolio-Banner.png"
@@ -201,51 +202,56 @@ export default function Hero() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 md:gap-6">
+          {/* Primary Dev Card 1 */}
           <div className="bg-[#121220] border border-[#232338] rounded-3xl md:rounded-[32px] p-4 md:p-8 flex flex-col justify-center items-center text-center aspect-square shadow-lg">
             <div className="w-10 h-10 md:w-16 md:h-16 bg-[#1c1c30] rounded-xl md:rounded-2xl flex items-center justify-center text-cyan-400 mb-3 md:mb-5">
               <Monitor className="w-[18px] h-[18px] md:w-8 md:h-8" />
             </div>
             <h4 className="text-white font-bold text-[13px] md:text-[18px] mb-1 md:mb-2">
-              Websites
+              Full Stack Web
             </h4>
             <p className="text-gray-400 text-[10px] md:text-[14px] leading-tight md:leading-snug">
-              Next.js • MERN • <br className="md:hidden" /> Typescript
+              Next.js • MERN • <br className="md:hidden" /> Scalable Apps
             </p>
           </div>
 
+          {/* Primary Dev Card 2 */}
           <div className="bg-[#121220] border border-[#232338] rounded-3xl md:rounded-[32px] p-4 md:p-8 flex flex-col justify-center items-center text-center aspect-square shadow-lg">
             <div className="w-10 h-10 md:w-16 md:h-16 bg-[#1c1c30] rounded-xl md:rounded-2xl flex items-center justify-center text-cyan-400 mb-3 md:mb-5">
               <Smartphone className="w-[18px] h-[18px] md:w-8 md:h-8" />
             </div>
             <h4 className="text-white font-bold text-[13px] md:text-[18px] mb-1 md:mb-2">
-              Mobile Apps
+              Cross-Platform
             </h4>
             <p className="text-gray-400 text-[10px] md:text-[14px] leading-tight md:leading-snug">
-              React Native • Expo • <br className="md:hidden" /> Typescript
+              React Native • Expo • <br className="md:hidden" /> iOS & Android
             </p>
           </div>
 
+          {/* UPDATED: Supporting Creative Card 1 - Reframed as UI/UX for Dev */}
           <div className="bg-[#121220] border border-[#232338] rounded-3xl md:rounded-[32px] p-4 md:p-8 flex flex-col justify-center items-center text-center aspect-square shadow-lg">
             <div className="w-10 h-10 md:w-16 md:h-16 bg-[#1c1c30] rounded-xl md:rounded-2xl flex items-center justify-center text-cyan-400 mb-3 md:mb-5">
               <PenTool className="w-[18px] h-[18px] md:w-8 md:h-8" />
             </div>
             <h4 className="text-white font-bold text-[13px] md:text-[18px] mb-1 md:mb-2">
-              Graphic Design
+              UI/UX Principles
             </h4>
             <p className="text-gray-400 text-[10px] md:text-[14px] leading-tight md:leading-snug">
-              Graphic Design • Branding
+              Design Systems • <br className="md:hidden" /> User Flow
             </p>
           </div>
 
+          {/* UPDATED: Supporting Creative Card 2 - Reframed as Interaction Design */}
           <div className="bg-[#121220] border border-[#232338] rounded-3xl md:rounded-[32px] p-4 md:p-8 flex flex-col justify-center items-center text-center aspect-square shadow-lg">
             <div className="w-10 h-10 md:w-16 md:h-16 bg-[#1c1c30] rounded-xl md:rounded-2xl flex items-center justify-center text-[#8b5cf6] mb-3 md:mb-5">
               <PlaySquare className="w-[18px] h-[18px] md:w-8 md:h-8" />
             </div>
             <h4 className="text-white font-bold text-[13px] md:text-[18px] mb-1 md:mb-2">
-              Motion Graphics
+              Interaction Design
             </h4>
             <p className="text-gray-400 text-[10px] md:text-[14px] leading-tight md:leading-snug">
-              Motion Graphics • 3D • Animation
+              Motion • Animations • <br className="md:hidden" />{" "}
+              Micro-interactions
             </p>
           </div>
         </div>
