@@ -445,7 +445,7 @@ export default function MotionGraphicsPage() {
                   <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
                     The Solution
                   </h3>
-                  <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+                  <p className="text-gray-300 text-sm md:text-base leading-relaxed pb-20">
                     {selectedCaseStudy.richContent?.solution}
                   </p>
                 </div>

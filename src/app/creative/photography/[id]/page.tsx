@@ -3,30 +3,50 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Facebook, Linkedin } from "lucide-react";
+import { db } from "../../../../../lib/firebase"; // ✅ Firebase import (পাথ চেক করে নিও)
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 
-// ✅ ২. ডেটা নতুন ফাইল থেকে ইমপোর্ট করা হচ্ছে (../data)
-import { photographyData, type PhotoItem } from "../data";
+// `page.tsx` থেকে PhotoItem ইন্টারফেসটি ইমপোর্ট করে নাও (যেহেতু ওটা export করা আছে)
+import type { PhotoItem } from "../page";
 
-// ✅ ৩. Next.js 15+ এর জন্য params কে Promise করা হয়েছে
 type Props = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }> | { id: string };
 };
 
-function getPhotoById(id: string): PhotoItem | null {
-  for (const item of photographyData) {
-    if (item.id === id) return item;
-    if (item.isAlbum && item.album) {
-      const innerMatch = item.album.find((a) => a.id === id);
-      if (innerMatch) return innerMatch;
+// ✅ ফায়ারবেস থেকে সরাসরি ডেটা খোঁজার ফাংশন
+async function getPhotoByIdFromFirestore(
+  id: string,
+): Promise<PhotoItem | null> {
+  try {
+    // ১. প্রথমে সরাসরি Document ID হিসেবে খোঁজার চেষ্টা করবে (মেইন ইমেজ বা অ্যালবাম কভার)
+    const docRef = doc(db, "photography", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() } as PhotoItem;
     }
+
+    // ২. যদি না পায়, তার মানে হয়তো এটা অ্যালবামের ভেতরের কোনো ছবি। তাই সব অ্যালবাম চেক করবে।
+    const querySnapshot = await getDocs(collection(db, "photography"));
+    for (const document of querySnapshot.docs) {
+      const data = document.data();
+      if (data.isAlbum && data.album) {
+        const innerMatch = data.album.find((a: any) => a.id === id);
+        if (innerMatch) {
+          // অ্যালবামের ভেতরের ছবি হলে, মেইন অ্যালবামের description টা ধার করে দিয়ে দিচ্ছি মেটা ট্যাগের জন্য
+          return { ...innerMatch, description: data.description } as PhotoItem;
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching photo from Firebase:", error);
   }
   return null;
 }
 
-// ✅ ৪. generateMetadata এখন async এবং params কে await করা হয়েছে
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const resolvedParams = await params;
-  const photo = getPhotoById(resolvedParams.id);
+  const resolvedParams = await Promise.resolve(params);
+  const photo = await getPhotoByIdFromFirestore(resolvedParams.id);
 
   if (!photo) {
     return {
@@ -71,10 +91,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// ✅ ৫. কম্পোনেন্ট এখন async এবং params কে await করা হয়েছে
 export default async function DedicatedPhotoPage({ params }: Props) {
-  const resolvedParams = await params;
-  const photo = getPhotoById(resolvedParams.id);
+  const resolvedParams = await Promise.resolve(params);
+  const photo = await getPhotoByIdFromFirestore(resolvedParams.id);
 
   if (!photo) {
     notFound();
