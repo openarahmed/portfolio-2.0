@@ -9,13 +9,26 @@ import {
   ZoomOut,
   X,
   Layers,
-  Share2,
   Check,
   Camera,
+  Facebook,
+  Linkedin,
+  Link as LinkIcon,
 } from "lucide-react";
 
-// === UNIFIED CHRONOLOGICAL DATA STRUCTURE ===
-const photographyData = [
+// === 1. TYPESCRIPT INTERFACE ===
+export interface PhotoItem {
+  id: string;
+  date?: string;
+  isAlbum?: boolean;
+  url: string;
+  title: string;
+  description?: string;
+  album?: PhotoItem[];
+}
+
+// === 2. UNIFIED CHRONOLOGICAL DATA STRUCTURE ===
+export const photographyData: PhotoItem[] = [
   {
     id: "p1",
     date: "2026-02-26",
@@ -137,25 +150,27 @@ export default function PhotographyPage() {
     url: string;
     title: string;
   } | null>(null);
+
   const [selectedAlbum, setSelectedAlbum] = useState<{
+    id: string;
     title: string;
     description?: string;
     coverUrl: string;
-    images: any[];
+    images: PhotoItem[];
   } | null>(null);
 
-  // --- Zoom and Drag State ---
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   const [linkCopied, setLinkCopied] = useState(false);
+  const [currentOrigin, setCurrentOrigin] = useState("");
 
-  // Auto-sort data by date
   const sortedData = useMemo(() => {
     return [...photographyData].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      (a, b) =>
+        new Date(b.date || "").getTime() - new Date(a.date || "").getTime(),
     );
   }, []);
 
@@ -163,32 +178,51 @@ export default function PhotographyPage() {
   const featuredShots = sortedData.slice(0, 3);
   const galleryShots = sortedData;
 
-  // Read URL parameters on initial load
   useEffect(() => {
     if (typeof window !== "undefined") {
+      setCurrentOrigin(window.location.origin);
       const params = new URLSearchParams(window.location.search);
       const photoId = params.get("photo");
       if (photoId) {
-        let targetPhoto = null;
+        let targetPhoto: PhotoItem | null = null;
+        let isAlbumTarget = false;
+
         for (const item of photographyData) {
-          if (item.id === photoId) targetPhoto = item;
+          if (item.id === photoId) {
+            targetPhoto = item;
+            if (item.isAlbum) isAlbumTarget = true;
+            break;
+          }
           if (item.isAlbum && item.album) {
             const innerMatch = item.album.find((a) => a.id === photoId);
-            if (innerMatch) targetPhoto = innerMatch;
+            if (innerMatch) {
+              targetPhoto = innerMatch;
+              break;
+            }
           }
         }
+
         if (targetPhoto) {
-          setSelectedImage({
-            id: targetPhoto.id,
-            url: targetPhoto.url,
-            title: targetPhoto.title,
-          });
+          if (isAlbumTarget && targetPhoto.album) {
+            setSelectedAlbum({
+              id: targetPhoto.id,
+              title: targetPhoto.title,
+              description: targetPhoto.description,
+              coverUrl: targetPhoto.url,
+              images: targetPhoto.album,
+            });
+          } else {
+            setSelectedImage({
+              id: targetPhoto.id,
+              url: targetPhoto.url,
+              title: targetPhoto.title,
+            });
+          }
         }
       }
     }
   }, []);
 
-  // --- Global Events for Dragging ---
   useEffect(() => {
     const handleGlobalMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
@@ -212,7 +246,6 @@ export default function PhotographyPage() {
     };
   }, [isDragging, dragStart]);
 
-  // Update URL and State when an image is opened
   const handleOpenImage = (id: string, url: string, title: string) => {
     setSelectedImage({ id, url, title });
     setZoomLevel(1);
@@ -222,17 +255,19 @@ export default function PhotographyPage() {
     }
   };
 
-  // Clean URL and State when an image is closed
   const handleCloseImage = () => {
     setSelectedImage(null);
     setZoomLevel(1);
     setPosition({ x: 0, y: 0 });
     if (typeof window !== "undefined") {
-      window.history.pushState(null, "", window.location.pathname);
+      if (selectedAlbum) {
+        window.history.pushState(null, "", `?photo=${selectedAlbum.id}`);
+      } else {
+        window.history.pushState(null, "", window.location.pathname);
+      }
     }
   };
 
-  // Handle Zoom Out with reset Check
   const handleZoomOut = (e: React.MouseEvent) => {
     e.stopPropagation();
     setZoomLevel((prev) => {
@@ -242,7 +277,6 @@ export default function PhotographyPage() {
     });
   };
 
-  // Handle Mouse Down to start dragging
   const handleMouseDown = (e: React.MouseEvent) => {
     if (zoomLevel <= 1) return;
     e.preventDefault();
@@ -253,12 +287,14 @@ export default function PhotographyPage() {
     setIsDragging(true);
   };
 
-  // Share functionality
   const handleCopyLink = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(window.location.href);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2000);
+    if (selectedImage) {
+      const shareUrl = `${currentOrigin}/creative/photography/${selectedImage.id}`;
+      navigator.clipboard.writeText(shareUrl);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    }
   };
 
   return (
@@ -274,14 +310,12 @@ export default function PhotographyPage() {
           opacity: 0;
           animation: customFadeInUp 0.6s ease-out forwards;
         }
-        /* Hide scrollbar for clean zoom container */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `,
         }}
       />
 
-      {/* === 1. HERO SECTION (UPDATED: Compact Layout) === */}
       <section className="relative w-full h-[45vh] min-h-[350px] flex flex-col justify-center items-center overflow-hidden py-10">
         <div className="absolute inset-0 w-full h-full">
           <Image
@@ -309,7 +343,6 @@ export default function PhotographyPage() {
           </span>
         </Link>
 
-        {/* Compressed Text Block */}
         <div className="relative z-10 text-center px-4 max-w-3xl mx-auto mt-6">
           <div className="w-10 h-10 md:w-12 md:h-12 mx-auto bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
             <Camera className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
@@ -320,9 +353,7 @@ export default function PhotographyPage() {
           <p className="text-emerald-400 text-xs md:text-sm font-bold tracking-widest uppercase mb-5">
             Framing the digital world
           </p>
-
           <div className="w-10 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto mb-5 rounded-full" />
-
           <p className="text-gray-300 text-xs md:text-sm leading-relaxed font-medium max-w-2xl mx-auto">
             Understanding light, spatial awareness, and visual balance does not
             just create better photographs. It builds an intuition for pixel
@@ -332,7 +363,6 @@ export default function PhotographyPage() {
         </div>
       </section>
 
-      {/* === 2. FEATURED HIGHLIGHTS === */}
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-4 md:mt-8 mb-20 md:mb-24">
         <div className="mb-8 border-b border-white/10 pb-4 flex justify-between items-end">
           <div>
@@ -367,11 +397,15 @@ export default function PhotographyPage() {
                   onClick={() => {
                     if (shot.isAlbum && shot.album) {
                       setSelectedAlbum({
+                        id: shot.id,
                         title: shot.title,
                         description: shot.description,
                         coverUrl: shot.url,
                         images: shot.album,
                       });
+                      if (typeof window !== "undefined") {
+                        window.history.pushState(null, "", `?photo=${shot.id}`);
+                      }
                     } else {
                       handleOpenImage(shot.id, shot.url, shot.title);
                     }
@@ -410,7 +444,6 @@ export default function PhotographyPage() {
         </div>
       </section>
 
-      {/* === 3. DYNAMIC MASONRY GALLERY === */}
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="mb-8 border-b border-white/10 pb-4">
           <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight">
@@ -439,11 +472,15 @@ export default function PhotographyPage() {
                 onClick={() => {
                   if (shot.isAlbum && shot.album) {
                     setSelectedAlbum({
+                      id: shot.id,
                       title: shot.title,
                       description: shot.description,
                       coverUrl: shot.url,
                       images: shot.album,
                     });
+                    if (typeof window !== "undefined") {
+                      window.history.pushState(null, "", `?photo=${shot.id}`);
+                    }
                   } else {
                     handleOpenImage(shot.id, shot.url, shot.title);
                   }
@@ -480,7 +517,6 @@ export default function PhotographyPage() {
         </div>
       </section>
 
-      {/* === 4. CALL TO ACTION === */}
       <section className="max-w-2xl mx-auto px-6 text-center">
         <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight mb-4">
           Ready to Build?
@@ -497,10 +533,10 @@ export default function PhotographyPage() {
         </Link>
       </section>
 
-      {/* === DEDICATED ALBUM MODAL === */}
+      {/* DEDICATED ALBUM MODAL */}
       {selectedAlbum && (
         <div className="fixed inset-0 z-[90] bg-[#050511]/95 backdrop-blur-xl overflow-y-auto animate-in fade-in duration-300">
-          <div className="sticky top-0 w-full flex items-center justify-between border-b border-white/10 z-50 shadow-2xl overflow-hidden min-h-[160px] md:min-h-[200px]">
+          <div className="sticky top-0 w-full flex items-center justify-between border-b border-white/10 z-50 shadow-2xl overflow-hidden min-h-[160px] md:min-h-[200px] bg-black/50">
             <div className="absolute inset-0 w-full h-full z-0">
               <Image
                 src={selectedAlbum.coverUrl}
@@ -527,12 +563,60 @@ export default function PhotographyPage() {
                   </p>
                 )}
               </div>
-              <button
-                className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors flex-shrink-0 ml-4 backdrop-blur-md border border-white/10"
-                onClick={() => setSelectedAlbum(null)}
-              >
-                <X size={24} />
-              </button>
+
+              <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-4">
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${currentOrigin}/creative/photography/${selectedAlbum.id}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full bg-[#1877F2]/20 hover:bg-[#1877F2]/40 text-[#1877F2] transition-colors backdrop-blur-md hidden md:flex border border-[#1877F2]/30"
+                  title="Share Album on Facebook"
+                >
+                  <Facebook size={20} />
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${currentOrigin}/creative/photography/${selectedAlbum.id}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full bg-[#0A66C2]/20 hover:bg-[#0A66C2]/40 text-[#0A66C2] transition-colors backdrop-blur-md hidden md:flex border border-[#0A66C2]/30"
+                  title="Share Album on LinkedIn"
+                >
+                  <Linkedin size={20} />
+                </a>
+                <button
+                  title="Copy Album Link"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(
+                      `${currentOrigin}/creative/photography/${selectedAlbum.id}`,
+                    );
+                    setLinkCopied(true);
+                    setTimeout(() => setLinkCopied(false), 2000);
+                  }}
+                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md border border-white/20"
+                >
+                  {linkCopied ? (
+                    <Check size={20} className="text-emerald-400" />
+                  ) : (
+                    <LinkIcon size={20} />
+                  )}
+                </button>
+                <button
+                  className="p-3 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors backdrop-blur-md border border-red-500/30 ml-2"
+                  onClick={() => {
+                    setSelectedAlbum(null);
+                    if (typeof window !== "undefined") {
+                      window.history.pushState(
+                        null,
+                        "",
+                        window.location.pathname,
+                      );
+                    }
+                  }}
+                >
+                  <X size={24} />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -564,27 +648,45 @@ export default function PhotographyPage() {
         </div>
       )}
 
-      {/* === SINGLE IMAGE LIGHTBOX MODAL WITH DRAGGABLE ZOOM === */}
+      {/* SINGLE IMAGE LIGHTBOX MODAL */}
       {selectedImage && (
         <div
           className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-300"
           onClick={handleCloseImage}
         >
-          {/* Top Control Bar */}
           <div className="absolute top-4 right-4 md:top-8 md:right-8 flex items-center gap-2 md:gap-3 z-50">
-            {!selectedAlbum && (
-              <button
-                title="Copy Link"
-                onClick={handleCopyLink}
-                className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md"
-              >
-                {linkCopied ? (
-                  <Check size={20} className="text-emerald-400" />
-                ) : (
-                  <Share2 size={20} />
-                )}
-              </button>
-            )}
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${currentOrigin}/creative/photography/${selectedImage.id}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#1877F2]/20 hover:bg-[#1877F2]/40 text-[#1877F2] transition-colors backdrop-blur-md hidden md:flex border border-[#1877F2]/30"
+              title="Share on Facebook"
+            >
+              <Facebook size={20} />
+            </a>
+
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${currentOrigin}/creative/photography/${selectedImage.id}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#0A66C2]/20 hover:bg-[#0A66C2]/40 text-[#0A66C2] transition-colors backdrop-blur-md hidden md:flex border border-[#0A66C2]/30"
+              title="Share on LinkedIn"
+            >
+              <Linkedin size={20} />
+            </a>
+
+            <button
+              title="Copy Direct Link"
+              onClick={handleCopyLink}
+              className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md mr-4 border border-white/20"
+            >
+              {linkCopied ? (
+                <Check size={20} className="text-emerald-400" />
+              ) : (
+                <LinkIcon size={20} />
+              )}
+            </button>
+
             <button
               title="Zoom Out"
               onClick={handleZoomOut}
@@ -609,13 +711,12 @@ export default function PhotographyPage() {
                 e.stopPropagation();
                 handleCloseImage();
               }}
-              className="p-3 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors backdrop-blur-md ml-2 md:ml-4"
+              className="p-3 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors backdrop-blur-md ml-2 md:ml-4 border border-red-500/30"
             >
               <X size={24} />
             </button>
           </div>
 
-          {/* Image Container with Draggable Zoom */}
           <div
             className="relative w-full max-w-[95vw] md:max-w-7xl h-[85vh] flex items-center justify-center overflow-hidden rounded-lg"
             onClick={(e) => e.stopPropagation()}
@@ -635,10 +736,9 @@ export default function PhotographyPage() {
                 transition: isDragging ? "none" : "transform 0.3s ease-out",
               }}
               className="max-w-full max-h-full object-contain shadow-2xl"
-              draggable={false} // Disable native image dragging
+              draggable={false}
             />
 
-            {/* Title Badge - Hidden when zooming heavily */}
             <div
               className={`fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-white font-medium tracking-widest text-sm uppercase transition-opacity duration-300 ${zoomLevel > 1.2 ? "opacity-0 pointer-events-none" : "opacity-100"}`}
             >
