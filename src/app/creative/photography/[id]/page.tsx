@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Facebook, Linkedin } from "lucide-react";
 
-// Import BOTH the data array and the TypeScript interface from the main gallery file
-import { photographyData, PhotoItem } from "../page";
+// ✅ ২. ডেটা নতুন ফাইল থেকে ইমপোর্ট করা হচ্ছে (../data)
+import { photographyData, type PhotoItem } from "../data";
 
-// ✅ FIX 1: Next.js 15-এ params একটি Promise, তাই টাইপ আপডেট করা হলো
+// ✅ ৩. Next.js 15+ এর জন্য params কে Promise করা হয়েছে
 type Props = {
   params: Promise<{ id: string }>;
 };
@@ -23,8 +23,8 @@ function getPhotoById(id: string): PhotoItem | null {
   return null;
 }
 
+// ✅ ৪. generateMetadata এখন async এবং params কে await করা হয়েছে
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // ✅ FIX 2: params কে await করা হলো
   const resolvedParams = await params;
   const photo = getPhotoById(resolvedParams.id);
 
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// ✅ FIX 3: কম্পোনেন্টকে async করা হলো এবং params await করা হলো
+// ✅ ৫. কম্পোনেন্ট এখন async এবং params কে await করা হয়েছে
 export default async function DedicatedPhotoPage({ params }: Props) {
   const resolvedParams = await params;
   const photo = getPhotoById(resolvedParams.id);
