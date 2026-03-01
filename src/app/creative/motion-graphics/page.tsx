@@ -11,87 +11,13 @@ import {
   Check,
   MonitorPlay,
   ArrowRight,
+  Facebook,
+  Linkedin,
+  Link as LinkIcon,
 } from "lucide-react";
 
-// === TYPESCRIPT INTERFACE ===
-interface MotionProject {
-  id: string;
-  date: string;
-  type: "case-study" | "standalone";
-  title: string;
-  category: string;
-  description?: string;
-  thumbnailUrl: string;
-  videoUrl: string;
-  tags?: string[];
-  gridSpan?: string;
-  richContent?: {
-    role: string;
-    challenge: string;
-    solution: string;
-  };
-}
-
-// === MOTION GRAPHICS DATA STRUCTURE ===
-const motionData: MotionProject[] = [
-  {
-    id: "mg1",
-    date: "2026-02-28",
-    type: "case-study",
-    title: "NUB Creative Platform Trailer",
-    category: "Cinematic Trailer",
-    description:
-      "A high-impact cinematic trailer designed to launch the new creative platform for Northern University Bangladesh, inspiring students to explore their creative potential.",
-    thumbnailUrl: "https://i.postimg.cc/GtL1D2Q3/portfolio_video_banner_1.png",
-    videoUrl: "https://www.youtube.com/embed/xwseky2ZxYA",
-    tags: ["Premiere Pro", "After Effects", "Sound Design", "Cinematography"],
-    richContent: {
-      role: "Video Editor & Motion Designer",
-      challenge:
-        "Northern University Bangladesh needed a compelling visual narrative to launch their new creative platform. The trailer had to feel energetic, modern, and deeply inspiring to capture the attention of a young, dynamic student body.",
-      solution:
-        "I crafted a fast-paced cinematic sequence using dynamic cuts, kinetic typography, and a highly immersive audio landscape. The visual pacing was designed to build anticipation and clearly communicate the platform's core vision of empowering student creativity.",
-    },
-  },
-  {
-    id: "mg2",
-    date: "2026-02-20",
-    type: "case-study",
-    title: "Codermat Service Promo",
-    category: "B2B Advertising",
-    description:
-      "A targeted advertising video for Codermat, highlighting their premium web development services and technical expertise to potential business clients.",
-    thumbnailUrl: "https://i.postimg.cc/kXXzCLGX/portfolio-video-banner-3.png",
-    videoUrl: "https://www.youtube.com/embed/tclP9A2ze64",
-    tags: ["Motion Graphics", "Premiere Pro", "B2B Marketing", "Tech Visuals"],
-    richContent: {
-      role: "Content Creator & Editor",
-      challenge:
-        "Codermat needed an engaging way to showcase their complex web development services to business owners who might lack technical expertise, without losing their attention in a crowded digital ad space.",
-      solution:
-        "I translated their technical offerings into sleek, easy-to-understand motion graphics and UI animations. Paired with a strong hook and a clear, benefit-driven narrative, the video acts as a highly effective conversion tool tailored for targeted digital campaigns.",
-    },
-  },
-  {
-    id: "mg3",
-    date: "2026-02-15",
-    type: "case-study",
-    title: "Codermat Social Campaign",
-    category: "Social Media Advertising",
-    description:
-      "A fast-paced, vertical-optimized short-form video advertisement designed to drive conversion for Codermat's web development services on social platforms.",
-    thumbnailUrl: "https://i.postimg.cc/6qWNZ3hD/portfolio_video_banner.png",
-    videoUrl: "https://www.youtube.com/embed/-HT9K-u4afY",
-    tags: ["Short Form Content", "Social Media", "After Effects", "Engagement"],
-    richContent: {
-      role: "Video Editor",
-      challenge:
-        "Capturing the attention of scrolling users on platforms like Instagram and TikTok requires the core value proposition of Codermat's development services to be delivered within the first three seconds.",
-      solution:
-        "Engineered a high-retention vertical video utilizing rapid visual hooks, bold typography, and modern transition effects. The visual hierarchy was specifically optimized for mobile screens to quickly communicate expertise and drive immediate click-throughs.",
-    },
-  },
-];
+// ✅ Import data and interface
+import { motionData, type MotionProject } from "./data";
 
 export default function MotionGraphicsPage() {
   const [selectedCaseStudy, setSelectedCaseStudy] =
@@ -101,7 +27,9 @@ export default function MotionGraphicsPage() {
     url: string;
     title: string;
   } | null>(null);
+
   const [linkCopied, setLinkCopied] = useState(false);
+  const [currentOrigin, setCurrentOrigin] = useState("");
 
   // Auto-sort data by date
   const sortedData = useMemo(() => {
@@ -118,6 +46,7 @@ export default function MotionGraphicsPage() {
   // Read URL parameters for Deep Linking
   useEffect(() => {
     if (typeof window !== "undefined") {
+      setCurrentOrigin(window.location.origin);
       const params = new URLSearchParams(window.location.search);
       const videoId = params.get("video");
       if (videoId) {
@@ -162,15 +91,13 @@ export default function MotionGraphicsPage() {
 
   const handleCloseVideo = () => {
     setSelectedVideo(null);
-    if (typeof window !== "undefined")
-      window.history.pushState(null, "", window.location.pathname);
-  };
-
-  const handleCopyLink = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigator.clipboard.writeText(window.location.href);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2000);
+    if (typeof window !== "undefined") {
+      if (selectedCaseStudy) {
+        window.history.pushState(null, "", `?video=${selectedCaseStudy.id}`);
+      } else {
+        window.history.pushState(null, "", window.location.pathname);
+      }
+    }
   };
 
   return (
@@ -396,20 +323,46 @@ export default function MotionGraphicsPage() {
             <span className="text-[10px] md:text-xs font-bold tracking-widest uppercase text-gray-400">
               Video Project
             </span>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${currentOrigin}/creative/motion-graphics/${selectedCaseStudy.id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-[#1877F2] transition-colors hidden sm:block"
+                title="Share on Facebook"
+              >
+                <Facebook size={18} />
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${currentOrigin}/creative/motion-graphics/${selectedCaseStudy.id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-[#0A66C2] transition-colors hidden sm:block"
+                title="Share on LinkedIn"
+              >
+                <Linkedin size={18} />
+              </a>
               <button
-                onClick={handleCopyLink}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigator.clipboard.writeText(
+                    `${currentOrigin}/creative/motion-graphics/${selectedCaseStudy.id}`,
+                  );
+                  setLinkCopied(true);
+                  setTimeout(() => setLinkCopied(false), 2000);
+                }}
                 className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"
+                title="Copy Link"
               >
                 {linkCopied ? (
                   <Check size={18} className="text-purple-400" />
                 ) : (
-                  <Share2 size={18} />
+                  <LinkIcon size={18} />
                 )}
               </button>
               <button
                 onClick={handleCloseCaseStudy}
-                className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"
+                className="p-2 md:p-2.5 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors ml-2 border border-red-500/30"
               >
                 <X size={18} />
               </button>
@@ -441,7 +394,6 @@ export default function MotionGraphicsPage() {
                     key={i}
                     className="text-gray-400 text-[10px] md:text-xs font-bold uppercase tracking-widest"
                   >
-                    {/* UPDATED: Fallback length check to resolve TS error */}
                     {tag}{" "}
                     {i < (selectedCaseStudy.tags?.length || 0) - 1 && (
                       <span className="mx-2 text-white/20">•</span>
@@ -509,27 +461,50 @@ export default function MotionGraphicsPage() {
           className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 md:p-12 animate-in fade-in duration-300"
           onClick={handleCloseVideo}
         >
-          <div className="absolute top-4 right-4 md:top-8 md:right-8 flex items-center gap-2 z-50">
-            {!selectedCaseStudy && (
-              <button
-                title="Copy Link"
-                onClick={handleCopyLink}
-                className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md"
-              >
-                {linkCopied ? (
-                  <Check size={20} className="text-purple-400" />
-                ) : (
-                  <Share2 size={20} />
-                )}
-              </button>
-            )}
+          <div className="absolute top-4 right-4 md:top-8 md:right-8 flex items-center gap-2 md:gap-3 z-50">
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${currentOrigin}/creative/motion-graphics/${selectedVideo.id}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#1877F2]/20 hover:bg-[#1877F2]/40 text-[#1877F2] transition-colors backdrop-blur-md hidden md:flex border border-[#1877F2]/30"
+              title="Share on Facebook"
+            >
+              <Facebook size={20} />
+            </a>
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${currentOrigin}/creative/motion-graphics/${selectedVideo.id}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#0A66C2]/20 hover:bg-[#0A66C2]/40 text-[#0A66C2] transition-colors backdrop-blur-md hidden md:flex border border-[#0A66C2]/30"
+              title="Share on LinkedIn"
+            >
+              <Linkedin size={20} />
+            </a>
+            <button
+              title="Copy Direct Link"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(
+                  `${currentOrigin}/creative/motion-graphics/${selectedVideo.id}`,
+                );
+                setLinkCopied(true);
+                setTimeout(() => setLinkCopied(false), 2000);
+              }}
+              className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md mr-4 border border-white/20"
+            >
+              {linkCopied ? (
+                <Check size={20} className="text-purple-400" />
+              ) : (
+                <LinkIcon size={20} />
+              )}
+            </button>
             <button
               title="Close"
               onClick={(e) => {
                 e.stopPropagation();
                 handleCloseVideo();
               }}
-              className="p-3 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors backdrop-blur-md ml-2"
+              className="p-3 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors backdrop-blur-md ml-2 md:ml-4 border border-red-500/30"
             >
               <X size={24} />
             </button>

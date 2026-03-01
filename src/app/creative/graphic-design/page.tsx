@@ -13,89 +13,21 @@ import {
   PenTool,
   LayoutTemplate,
   ArrowRight,
+  Facebook,
+  Linkedin,
+  Link as LinkIcon,
 } from "lucide-react";
 
-// === TYPESCRIPT INTERFACE ===
-interface GraphicProject {
-  id: string;
-  date: string;
-  type: "case-study" | "standalone";
-  title: string;
-  category: string;
-  description?: string;
-  url: string;
-  tags?: string[];
-  gridSpan?: string;
-  richContent?: {
-    role: string;
-    challenge: string;
-    solution: string;
-    extraImages?: { id: string; url: string; title: string }[];
-  };
-}
-
-// === GRAPHIC DESIGN DATA STRUCTURE (All Upgraded to Case Studies) ===
-const graphicData: GraphicProject[] = [
-  {
-    id: "gd1",
-    date: "2026-02-25",
-    type: "case-study",
-    title: "Premium Product Packaging",
-    category: "Branding & Print",
-    description:
-      "A complete label and packaging design system emphasizing organic ingredients and premium market positioning.",
-    url: "https://i.postimg.cc/MG0BZPrX/Label-for-holuder-copy.jpg",
-    tags: ["Packaging", "Print Design", "Typography", "Photoshop"],
-    richContent: {
-      role: "Lead Visual Designer",
-      challenge:
-        "The market for organic spices is heavily saturated. The client needed a packaging design that felt both traditional/authentic and premium/modern to stand out on supermarket shelves.",
-      solution:
-        "I utilized a warm, earthy color palette combined with clean, modern typography. The focal point is a custom vector illustration that instantly communicates the product's core ingredient. The layout was carefully structured to ensure all regulatory information was readable without cluttering the visual hierarchy.",
-    },
-  },
-  {
-    id: "gd2",
-    date: "2026-02-15",
-    type: "case-study",
-    title: "University Webinar Banner",
-    category: "Digital Marketing",
-    description:
-      "A high-conversion digital banner designed for Northern University Bangladesh to promote an upcoming creative webinar.",
-    url: "https://i.postimg.cc/2j04Btkt/nub-WEBINAR-(1).jpg",
-    tags: ["Digital Banner", "Typography", "Marketing Asset", "Illustrator"],
-    richContent: {
-      role: "Graphic Designer",
-      challenge:
-        "Capturing the attention of students scrolling rapidly through social media feeds, requiring clear communication of the webinar's value proposition, date, and key speakers in a limited visual space.",
-      solution:
-        "Implemented a high-contrast color scheme aligned with NUB's brand identity. I used bold, hierarchical typography to make the key information pop, ensuring the call-to-action was immediately visible and legible on both desktop and mobile screens.",
-    },
-  },
-  {
-    id: "gd3",
-    date: "2026-02-10",
-    type: "case-study",
-    title: "Social Media Campaign",
-    category: "Brand Awareness",
-    description:
-      "A cohesive visual asset crafted for a targeted social media marketing campaign, focusing on audience engagement.",
-    url: "https://i.postimg.cc/qRXTgn8k/graphics_design.jpg",
-    tags: ["Social Media", "Campaign Design", "Layout", "Photoshop"],
-    richContent: {
-      role: "Content Designer",
-      challenge:
-        "Creating a visual language that felt fresh and engaging for a younger demographic while maintaining professional brand consistency across multiple digital platforms.",
-      solution:
-        "Developed a precise design system using dynamic layouts, modern gradient overlays, and strong focal imagery. The structured grid approach allowed the visual to communicate complex information cleanly without feeling cluttered.",
-    },
-  },
-];
+// ✅ Import data and interface
+import { graphicData, type GraphicProject } from "./data";
 
 export default function GraphicDesignPage() {
   const [selectedCaseStudy, setSelectedCaseStudy] =
     useState<GraphicProject | null>(null);
+
+  // ✅ Added ID to state for proper sharing links
   const [selectedImage, setSelectedImage] = useState<{
+    id: string;
     url: string;
     title: string;
   } | null>(null);
@@ -104,7 +36,9 @@ export default function GraphicDesignPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
   const [linkCopied, setLinkCopied] = useState(false);
+  const [currentOrigin, setCurrentOrigin] = useState("");
 
   const sortedData = useMemo(() => {
     return [...graphicData].sort(
@@ -119,15 +53,37 @@ export default function GraphicDesignPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      setCurrentOrigin(window.location.origin);
       const params = new URLSearchParams(window.location.search);
       const designId = params.get("design");
+
       if (designId) {
-        const targetDesign = graphicData.find((item) => item.id === designId);
+        let targetDesign: any = null;
+        let isCaseStudy = false;
+
+        for (const item of graphicData) {
+          if (item.id === designId) {
+            targetDesign = item;
+            if (item.type === "case-study") isCaseStudy = true;
+            break;
+          }
+          if (item.richContent?.extraImages) {
+            const innerMatch = item.richContent.extraImages.find(
+              (img) => img.id === designId,
+            );
+            if (innerMatch) {
+              targetDesign = innerMatch;
+              break;
+            }
+          }
+        }
+
         if (targetDesign) {
-          if (targetDesign.type === "case-study") {
+          if (isCaseStudy) {
             setSelectedCaseStudy(targetDesign);
           } else {
             setSelectedImage({
+              id: targetDesign.id,
               url: targetDesign.url,
               title: targetDesign.title,
             });
@@ -175,25 +131,32 @@ export default function GraphicDesignPage() {
     url: string,
     title: string,
   ) => {
-    setSelectedImage({ url, title });
+    setSelectedImage({ id, url, title });
     setZoomLevel(1);
     setPosition({ x: 0, y: 0 });
     if (typeof window !== "undefined")
       window.history.pushState(null, "", `?design=${id}`);
   };
 
-  const handleOpenSubImage = (url: string, title: string) => {
-    setSelectedImage({ url, title });
+  const handleOpenSubImage = (id: string, url: string, title: string) => {
+    setSelectedImage({ id, url, title });
     setZoomLevel(1);
     setPosition({ x: 0, y: 0 });
+    if (typeof window !== "undefined") {
+      window.history.pushState(null, "", `?design=${id}`);
+    }
   };
 
   const handleCloseImage = () => {
     setSelectedImage(null);
     setZoomLevel(1);
     setPosition({ x: 0, y: 0 });
-    if (typeof window !== "undefined" && !selectedCaseStudy) {
-      window.history.pushState(null, "", window.location.pathname);
+    if (typeof window !== "undefined") {
+      if (selectedCaseStudy) {
+        window.history.pushState(null, "", `?design=${selectedCaseStudy.id}`);
+      } else {
+        window.history.pushState(null, "", window.location.pathname);
+      }
     }
   };
 
@@ -213,13 +176,6 @@ export default function GraphicDesignPage() {
     setIsDragging(true);
   };
 
-  const handleCopyLink = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigator.clipboard.writeText(window.location.href);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2000);
-  };
-
   return (
     <main className="min-h-screen bg-[#050511] text-white selection:bg-blue-500/30 font-sans pb-58">
       <style
@@ -236,7 +192,6 @@ export default function GraphicDesignPage() {
         }}
       />
 
-      {/* === 1. HERO SECTION (Compact Layout) === */}
       <section className="relative w-full h-[45vh] min-h-[350px] flex flex-col justify-center items-center overflow-hidden py-10">
         <div className="absolute inset-0 w-full h-full">
           <Image
@@ -261,7 +216,6 @@ export default function GraphicDesignPage() {
           </span>
         </Link>
 
-        {/* Compressed Text Block */}
         <div className="relative z-10 text-center px-4 max-w-3xl mx-auto mt-6">
           <div className="w-10 h-10 md:w-12 md:h-12 mx-auto bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
             <PenTool className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
@@ -272,9 +226,7 @@ export default function GraphicDesignPage() {
           <p className="text-blue-400 text-xs md:text-sm font-bold tracking-widest uppercase mb-5">
             Designing the foundation
           </p>
-
           <div className="w-10 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mb-5 rounded-full" />
-
           <p className="text-gray-300 text-xs md:text-sm leading-relaxed font-medium max-w-2xl mx-auto">
             Before I write a single line of code, I architect the visual
             language. My background as a graphic designer ensures that every
@@ -284,7 +236,6 @@ export default function GraphicDesignPage() {
         </div>
       </section>
 
-      {/* === 2. FEATURED CASE STUDIES === */}
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-4 md:mt-8 mb-24 md:mb-32 space-y-20 md:space-y-28">
         <div className="border-b border-white/10 pb-4 mb-8 flex justify-between items-end">
           <div>
@@ -359,7 +310,6 @@ export default function GraphicDesignPage() {
         })}
       </section>
 
-      {/* === 3. STANDALONE ASSETS (Bento Grid) - Preserved for future additions === */}
       {standaloneAssets.length > 0 && (
         <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-24">
           <div className="mb-10 border-b border-white/10 pb-4">
@@ -411,7 +361,6 @@ export default function GraphicDesignPage() {
         </section>
       )}
 
-      {/* === 4. CALL TO ACTION === */}
       <section className="max-w-2xl mx-auto px-6 text-center">
         <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight mb-4">
           Let's Build Something
@@ -435,20 +384,46 @@ export default function GraphicDesignPage() {
             <span className="text-[10px] md:text-xs font-bold tracking-widest uppercase text-gray-400">
               Case Study
             </span>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${currentOrigin}/creative/graphic-design/${selectedCaseStudy.id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-blue-500 transition-colors hidden sm:block"
+                title="Share on Facebook"
+              >
+                <Facebook size={18} />
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${currentOrigin}/creative/graphic-design/${selectedCaseStudy.id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-blue-400 transition-colors hidden sm:block"
+                title="Share on LinkedIn"
+              >
+                <Linkedin size={18} />
+              </a>
               <button
-                onClick={handleCopyLink}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigator.clipboard.writeText(
+                    `${currentOrigin}/creative/graphic-design/${selectedCaseStudy.id}`,
+                  );
+                  setLinkCopied(true);
+                  setTimeout(() => setLinkCopied(false), 2000);
+                }}
                 className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"
+                title="Copy Link"
               >
                 {linkCopied ? (
                   <Check size={18} className="text-blue-400" />
                 ) : (
-                  <Share2 size={18} />
+                  <LinkIcon size={18} />
                 )}
               </button>
               <button
                 onClick={handleCloseCaseStudy}
-                className="p-2 md:p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"
+                className="p-2 md:p-2.5 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors ml-2 border border-red-500/30"
               >
                 <X size={18} />
               </button>
@@ -458,7 +433,11 @@ export default function GraphicDesignPage() {
           <div
             className="relative w-full h-[40vh] md:h-[60vh] mt-14 md:mt-16 group cursor-pointer"
             onClick={() =>
-              handleOpenSubImage(selectedCaseStudy.url, selectedCaseStudy.title)
+              handleOpenSubImage(
+                selectedCaseStudy.id,
+                selectedCaseStudy.url,
+                selectedCaseStudy.title,
+              )
             }
           >
             <Image
@@ -564,7 +543,9 @@ export default function GraphicDesignPage() {
                         <div
                           key={img.id}
                           className="relative aspect-video rounded-xl overflow-hidden group cursor-pointer border border-white/5 bg-[#12121a]"
-                          onClick={() => handleOpenSubImage(img.url, img.title)}
+                          onClick={() =>
+                            handleOpenSubImage(img.id, img.url, img.title)
+                          }
                         >
                           <Image
                             src={img.url}
@@ -595,19 +576,45 @@ export default function GraphicDesignPage() {
           onClick={handleCloseImage}
         >
           <div className="absolute top-4 right-4 md:top-8 md:right-8 flex items-center gap-2 md:gap-3 z-50">
-            {!selectedCaseStudy && (
-              <button
-                title="Copy Link"
-                onClick={handleCopyLink}
-                className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md"
-              >
-                {linkCopied ? (
-                  <Check size={20} className="text-blue-400" />
-                ) : (
-                  <Share2 size={20} />
-                )}
-              </button>
-            )}
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${currentOrigin}/creative/graphic-design/${selectedImage.id}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#1877F2]/20 hover:bg-[#1877F2]/40 text-[#1877F2] transition-colors backdrop-blur-md hidden md:flex border border-[#1877F2]/30"
+              title="Share on Facebook"
+            >
+              <Facebook size={20} />
+            </a>
+
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${currentOrigin}/creative/graphic-design/${selectedImage.id}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#0A66C2]/20 hover:bg-[#0A66C2]/40 text-[#0A66C2] transition-colors backdrop-blur-md hidden md:flex border border-[#0A66C2]/30"
+              title="Share on LinkedIn"
+            >
+              <Linkedin size={20} />
+            </a>
+
+            <button
+              title="Copy Direct Link"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(
+                  `${currentOrigin}/creative/graphic-design/${selectedImage.id}`,
+                );
+                setLinkCopied(true);
+                setTimeout(() => setLinkCopied(false), 2000);
+              }}
+              className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-md mr-4 border border-white/20"
+            >
+              {linkCopied ? (
+                <Check size={20} className="text-blue-400" />
+              ) : (
+                <LinkIcon size={20} />
+              )}
+            </button>
+
             <button
               title="Zoom Out"
               onClick={handleZoomOut}
@@ -632,7 +639,7 @@ export default function GraphicDesignPage() {
                 e.stopPropagation();
                 handleCloseImage();
               }}
-              className="p-3 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors backdrop-blur-md ml-2 md:ml-4"
+              className="p-3 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 transition-colors backdrop-blur-md ml-2 md:ml-4 border border-red-500/30"
             >
               <X size={24} />
             </button>
