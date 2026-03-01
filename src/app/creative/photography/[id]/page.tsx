@@ -7,11 +7,11 @@ import { ArrowLeft, Facebook, Linkedin } from "lucide-react";
 // Import BOTH the data array and the TypeScript interface from the main gallery file
 import { photographyData, PhotoItem } from "../page";
 
+// ✅ FIX 1: Next.js 15-এ params একটি Promise, তাই টাইপ আপডেট করা হলো
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-// Apply the imported interface as the return type.
 function getPhotoById(id: string): PhotoItem | null {
   for (const item of photographyData) {
     if (item.id === id) return item;
@@ -23,9 +23,10 @@ function getPhotoById(id: string): PhotoItem | null {
   return null;
 }
 
-// === UPDATED METADATA SECTION ===
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const photo = getPhotoById(params.id);
+  // ✅ FIX 2: params কে await করা হলো
+  const resolvedParams = await params;
+  const photo = getPhotoById(resolvedParams.id);
 
   if (!photo) {
     return {
@@ -36,7 +37,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = "https://shakil.click";
   const pageUrl = `${siteUrl}/creative/photography/${photo.id}`;
 
-  // Ensure the image URL is absolute for Facebook/Twitter to read properly
   const imageUrl = photo.url.startsWith("http")
     ? photo.url
     : `${siteUrl}${photo.url}`;
@@ -56,14 +56,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: imageUrl,
-          width: 1200, // Important for Facebook large preview
-          height: 630, // Important for Facebook large preview
+          width: 1200,
+          height: 630,
           alt: photo.title,
         },
       ],
     },
     twitter: {
-      card: "summary_large_image", // Ensures large image on Twitter/X too
+      card: "summary_large_image",
       title: photo.title,
       description: photo.description || defaultDesc,
       images: [imageUrl],
@@ -71,8 +71,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function DedicatedPhotoPage({ params }: Props) {
-  const photo = getPhotoById(params.id);
+// ✅ FIX 3: কম্পোনেন্টকে async করা হলো এবং params await করা হলো
+export default async function DedicatedPhotoPage({ params }: Props) {
+  const resolvedParams = await params;
+  const photo = getPhotoById(resolvedParams.id);
 
   if (!photo) {
     notFound();
