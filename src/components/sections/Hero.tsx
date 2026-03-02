@@ -88,7 +88,7 @@ export default function Hero() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#250b4d_10%,transparent_80%)] opacity-95 z-0"></div>
             <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/3 w-[300px] h-[300px] bg-[#5b21b6]/60 blur-[75px] rounded-full pointer-events-none z-0"></div>
             <Image
-              src="https://i.postimg.cc/L8cTqLX8/Shakil-s-Personal-Portfolio-Banner.png"
+              src="/Shakil-s-Personal-Portfolio-Banner.png"
               alt="Shakil Profile"
               fill
               sizes="(max-width: 1024px) 100vw, 480px"
@@ -160,7 +160,7 @@ export default function Hero() {
 
           <div className="absolute bottom-0 -right-4 md:right-0 w-[55%] md:w-[50%] h-[100%] md:h-full pointer-events-none">
             <Image
-              src="https://i.postimg.cc/L8cTqLX8/Shakil-s-Personal-Portfolio-Banner.png"
+              src="/Shakil-s-Personal-Portfolio-Banner.png"
               alt="Shakil"
               fill
               sizes="(max-width: 1024px) 50vw, 33vw"

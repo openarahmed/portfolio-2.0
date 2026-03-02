@@ -222,7 +222,17 @@ export default function PhotographyPage() {
   }
 
   const latestPost = photographyData[0];
-  const featuredShots = photographyData.slice(0, 3);
+
+  const fixedGiantPhoto: PhotoItem = {
+    id: "fixed-ocean-card",
+    url: "/Ocean-1.webp",
+    title: "Ocean Waves",
+    description:
+      "A calm shoreline moment captured at Inani Beach in Cox’s Bazar, where gentle waves meet the sandy coast under soft natural light, highlighting the peaceful rhythm of the sea.",
+    isAlbum: false,
+  };
+
+  const featuredShots = [fixedGiantPhoto, ...photographyData.slice(0, 2)];
   const galleryShots = photographyData;
 
   return (
@@ -527,7 +537,7 @@ export default function PhotographyPage() {
       {/* DEDICATED ALBUM MODAL */}
       {selectedAlbum && (
         <div className="fixed inset-0 z-[90] bg-[#050511]/95 backdrop-blur-xl overflow-y-auto animate-in fade-in duration-300">
-          <div className="sticky top-0 w-full flex justify-center border-b border-white/10 z-50 shadow-2xl overflow-hidden min-h-[140px] md:min-h-[200px] bg-black/50">
+          <div className=" top-0 w-full flex justify-center border-b border-white/10 z-50 shadow-2xl overflow-hidden min-h-[140px] md:min-h-[200px] bg-black/50">
             <div className="absolute inset-0 w-full h-full z-0">
               <Image
                 src={selectedAlbum.coverUrl}
@@ -621,7 +631,7 @@ export default function PhotographyPage() {
           </div>
 
           <div className="max-w-[1440px] mx-auto px-2 sm:px-6 lg:px-8 py-4 md:py-10">
-            <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 md:gap-4 space-y-3 md:space-y-4">
+            <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 md:gap-4 space-y-3 md:space-y-4 pb-20">
               {selectedAlbum.images.map((img, index) => (
                 <div
                   key={img.id}
