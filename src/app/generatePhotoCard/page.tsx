@@ -22,6 +22,7 @@ export default function GeneratePhotoCard() {
   const [postImage, setPostImage] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [downloading, setDownloading] = useState(false); // ডাউনলোড স্টেট
 
   const [currentTime, setCurrentTime] = useState("");
   const [currentDate, setCurrentDate] = useState("");
@@ -80,11 +81,16 @@ export default function GeneratePhotoCard() {
 
   const handleDownload = async () => {
     if (!cardRef.current) return;
+    setDownloading(true); // প্রসেসিং শুরু
 
     try {
+      // ✅ ছবির কোয়ালিটি HD করার জন্য pixelRatio বাড়ানো হয়েছে
       const dataUrl = await toPng(cardRef.current, {
-        pixelRatio: 2,
+        pixelRatio: 6, // ঘনত্ব ৪ গুণ বাড়ানো হয়েছে (4K Quality)
         backgroundColor: "#ffffff",
+        style: {
+          borderRadius: "inherit", // ছবির কোনায় যেন কোনো গোলমাল না হয়
+        },
       });
 
       const link = document.createElement("a");
@@ -93,44 +99,48 @@ export default function GeneratePhotoCard() {
       link.click();
     } catch (error) {
       console.error("Error generating image:", error);
+      alert(
+        "Sir, the HD image generation failed due to a rendering error. The browser might be out of memory for this high of a resolution.",
+      );
+    } finally {
+      setDownloading(false); // প্রসেসিং শেষ
     }
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto pb-20 pt-6 sm:pt-10 px-4 sm:px-6">
-      {/* Header */}
-      <div className="mb-8 sm:mb-10 text-center xl:text-left">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase text-white leading-none">
-          Generate <br className="hidden sm:block" />
+    <div className="w-full max-w-6xl mx-auto pb-20 pt-10 px-4">
+      <div className="mb-10">
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight uppercase text-white leading-none">
+          Generate <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 filter drop-shadow-lg">
-            Photo Card
+            HD Photo Card
           </span>
         </h1>
       </div>
 
-      <div className="flex flex-col xl:flex-row gap-8 sm:gap-10 items-center xl:items-start">
+      <div className="flex flex-col xl:flex-row gap-10 items-start">
         {/* Admin Controls Section */}
-        <div className="w-full xl:w-1/3 relative bg-[#131620]/60 backdrop-blur-2xl border border-white/5 rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 shadow-[0_0_40px_rgba(0,0,0,0.3)] overflow-hidden">
-          <div className="absolute top-0 right-0 w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] bg-emerald-600/5 blur-[80px] sm:blur-[100px] rounded-full pointer-events-none" />
+        <div className="w-full xl:w-1/3 relative bg-[#131620]/60 backdrop-blur-2xl border border-white/5 rounded-[32px] p-8 shadow-[0_0_40px_rgba(0,0,0,0.3)] overflow-hidden shrink-0">
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-emerald-600/5 blur-[100px] rounded-full pointer-events-none" />
 
-          <div className="relative z-10 flex flex-col gap-5 sm:gap-6">
-            <div className="space-y-2 sm:space-y-3 group">
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="space-y-3 group">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 group-focus-within:text-emerald-400 transition-colors">
                 Card Caption
               </label>
               <textarea
-                className="w-full h-28 sm:h-32 bg-[#050511] border border-white/10 rounded-xl sm:rounded-2xl py-3 px-4 sm:py-4 sm:px-5 text-gray-300 placeholder-gray-700 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all resize-none text-sm shadow-inner custom-scrollbar"
+                className="w-full h-32 bg-[#050511] border border-white/10 rounded-2xl py-4 px-5 text-gray-300 placeholder-gray-700 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all resize-none text-sm shadow-inner custom-scrollbar"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 placeholder="Write your thoughts here..."
               />
             </div>
 
-            <div className="space-y-2 sm:space-y-3 group">
+            <div className="space-y-3 group">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1 group-focus-within:text-teal-400 transition-colors">
                 Card Image (Optional)
               </label>
-              <div className="flex flex-col sm:flex-row gap-2 relative">
+              <div className="flex gap-2 relative">
                 <div className="relative flex-1">
                   <LinkIcon
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600"
@@ -139,7 +149,7 @@ export default function GeneratePhotoCard() {
                   <input
                     type="text"
                     placeholder="Paste link or upload..."
-                    className="w-full bg-[#050511] border border-white/10 rounded-xl py-3 sm:py-4 pl-10 pr-4 text-gray-300 placeholder-gray-700 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all font-mono text-sm shadow-inner"
+                    className="w-full bg-[#050511] border border-white/10 rounded-xl py-4 pl-10 pr-4 text-gray-300 placeholder-gray-700 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all font-mono text-sm shadow-inner"
                     value={postImage}
                     onChange={(e) => setPostImage(e.target.value)}
                   />
@@ -154,17 +164,12 @@ export default function GeneratePhotoCard() {
                 />
                 <label
                   htmlFor="cardImage"
-                  className="flex items-center justify-center bg-teal-600/10 hover:bg-teal-600/20 border border-teal-500/30 rounded-xl py-3 px-5 sm:py-0 cursor-pointer transition-colors"
+                  className="flex items-center justify-center bg-teal-600/10 hover:bg-teal-600/20 border border-teal-500/30 rounded-xl px-5 cursor-pointer transition-colors"
                 >
                   {uploading ? (
                     <Loader2 className="animate-spin text-teal-400" size={20} />
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <UploadCloud className="text-teal-400" size={20} />
-                      <span className="text-teal-400 text-sm font-bold sm:hidden">
-                        Upload File
-                      </span>
-                    </div>
+                    <UploadCloud className="text-teal-400" size={20} />
                   )}
                 </label>
               </div>
@@ -179,57 +184,68 @@ export default function GeneratePhotoCard() {
               )}
             </div>
 
+            {/* আপডেট করা ডাউনলোড বাটন */}
             <button
               onClick={handleDownload}
-              disabled={uploading}
-              className="mt-2 sm:mt-4 relative overflow-hidden group w-full py-3 sm:py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-sm tracking-widest uppercase shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={uploading || downloading} // প্রসেসিং চলাকালীন ডিজেবল থাকবে
+              className="mt-4 relative overflow-hidden group w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-sm tracking-widest uppercase shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
-                <Download size={18} />
-                Download Final Card
+                {downloading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Generating HD Image...
+                  </>
+                ) : (
+                  <>
+                    <Download size={18} />
+                    Download Final Card
+                  </>
+                )}
               </span>
             </button>
           </div>
         </div>
 
         {/* Live Preview Section */}
-        <div className="w-full xl:w-auto flex justify-center bg-[#1a1d27] p-4 sm:p-8 rounded-[24px] sm:rounded-[32px] border border-white/10 overflow-hidden">
-          {/* Responsive Card Container */}
+        <div className="w-full xl:w-auto flex justify-center bg-[#1a1d27] p-8 rounded-[32px] border border-white/10 overflow-hidden">
           <div
             ref={cardRef}
-            className="w-full max-w-[400px] aspect-[4/5] bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col overflow-hidden font-sans mx-auto"
+            // Strict 4:5 Aspect Ratio maintain করা হয়েছে
+            className="w-[400px] aspect-[4/5] bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col overflow-hidden font-sans"
           >
             {/* Header */}
-            <div className="p-3 sm:p-4 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-4 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3">
                 <img
                   src="/shakil.jpg"
                   alt="Shakil Ahmed"
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+                  className="w-12 h-12 rounded-full object-cover"
                   crossOrigin="anonymous"
                 />
                 <div className="flex flex-col">
-                  <h3 className="font-bold text-gray-900 text-[14px] sm:text-base leading-tight whitespace-nowrap">
+                  <h3 className="font-bold text-gray-900 text-base leading-tight whitespace-nowrap">
                     Shakil Ahmed
                   </h3>
-                  <p className="text-gray-500 text-[11px] sm:text-sm whitespace-nowrap">
+                  <p className="text-gray-500 text-sm whitespace-nowrap">
                     @communicate.shakil
                   </p>
                 </div>
               </div>
-              <button className="bg-[#0f1419] text-white px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-full font-bold text-xs sm:text-sm whitespace-nowrap">
+              <button className="bg-[#0f1419] text-white px-4 py-1.5 rounded-full font-bold text-sm whitespace-nowrap">
                 Following
               </button>
             </div>
 
             {/* Dynamic Body Area */}
-            <div className="px-3 sm:px-4 pb-2 flex-grow flex flex-col overflow-hidden">
+            <div className="px-4 pb-2 flex-grow flex flex-col overflow-hidden">
               {postImage ? (
                 <>
-                  <p className="text-[#0f1419] text-[13px] sm:text-[15px] leading-normal mb-2 sm:mb-3 whitespace-pre-wrap shrink-0">
+                  {/* Image Post Layout */}
+                  <p className="text-[#0f1419] text-[15px] leading-normal mb-3 whitespace-pre-wrap shrink-0">
                     {caption}
                   </p>
-                  <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-gray-100 flex-grow min-h-0 relative">
+                  <div className="rounded-2xl overflow-hidden border border-gray-100 flex-grow min-h-0 relative">
                     <img
                       src={postImage}
                       alt="Post attachment"
@@ -239,8 +255,9 @@ export default function GeneratePhotoCard() {
                 </>
               ) : (
                 <>
-                  <div className="rounded-xl sm:rounded-2xl overflow-hidden flex-grow min-h-0 relative bg-[#6B1A28] flex items-center justify-center p-4 sm:p-8 border border-transparent">
-                    <p className="text-white text-[18px] sm:text-[28px] font-bold leading-snug text-center whitespace-pre-wrap drop-shadow-md">
+                  {/* Text-Only Template Layout (আপনার ছবি অনুযায়ী) */}
+                  <div className="rounded-2xl overflow-hidden flex-grow min-h-0 relative bg-[#6B1A28] flex items-center justify-center p-8 border border-transparent">
+                    <p className="text-white text-[28px] md:text-[32px] font-bold leading-snug text-center whitespace-pre-wrap drop-shadow-md">
                       {caption}
                     </p>
                   </div>
@@ -248,12 +265,13 @@ export default function GeneratePhotoCard() {
               )}
             </div>
 
-            {/* Footer Metrics */}
-            <div className="px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-sm text-gray-500 border-b border-gray-100 shrink-0 whitespace-nowrap">
+            {/* Footer Metrics (Dynamic Date/Time) */}
+            <div className="px-4 py-3 flex items-center gap-1.5 text-sm text-gray-500 border-b border-gray-100 shrink-0 whitespace-nowrap">
               <span className="whitespace-nowrap">{currentTime}</span>
               <span className="whitespace-nowrap">·</span>
               <span className="whitespace-nowrap">{currentDate}</span>
               <span className="whitespace-nowrap">·</span>
+              {/* ✅ Fixed 100K Views */}
               <span className="font-bold text-gray-900 whitespace-nowrap">
                 100K
               </span>
@@ -261,21 +279,21 @@ export default function GeneratePhotoCard() {
             </div>
 
             {/* Footer Actions */}
-            <div className="px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between text-gray-500 shrink-0">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-[11px] sm:text-sm">312</span>
+            <div className="px-4 py-3 flex items-center justify-between text-gray-500 shrink-0">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-sm">312</span>
               </div>
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <Repeat2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-[11px] sm:text-sm">1.2K</span>
+              <div className="flex items-center gap-2">
+                <Repeat2 className="w-5 h-5" />
+                <span className="text-sm">1.2K</span>
               </div>
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-[11px] sm:text-sm">15.4K</span>
+              <div className="flex items-center gap-2">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm">15.4K</span>
               </div>
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <Share className="w-4 h-4 sm:w-5 sm:h-5" />
+              <div className="flex items-center gap-2">
+                <Share className="w-5 h-5" />
               </div>
             </div>
           </div>
